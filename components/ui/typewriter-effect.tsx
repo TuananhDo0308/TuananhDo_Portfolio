@@ -57,7 +57,7 @@ setDisplayed(
             animate={{ opacity: 1}}
             transition={{ duration: 0.15 }}
             className={cn(
-              "dark:text-white text-black font-bold",
+              "text-black font-bold",
               words[wordIndex].className
             )}
           >

@@ -1,6 +1,5 @@
 import { motion, useMotionValue } from 'framer-motion';
 import { useEffect } from 'react';
-import '../assets/style/custom-cursor.css';
 import { useCursorContext } from '../components/CursorContext';
 
 function Cursor() {

@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
+const repo = "TuananhDo_Portfolio";
 
 const nextConfig: NextConfig = {
-  output: "export",
   
 
   reactStrictMode: false, // Tạm thời tắt để test
+  //   output: "export",
+
+  //   basePath: `/${repo}`,
+  // assetPrefix: `/${repo}/`,
   images: {
     unoptimized: true ,
     remotePatterns: [

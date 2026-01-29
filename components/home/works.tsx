@@ -7,25 +7,7 @@ import { useCursorContext } from "../CursorContext";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/lib/project";
 
-interface WorkItem {
-  id: number;
-  type: string;
-  title: string;
-  description: string;
-  image: string;
-}
-
-
-export default function Works({columns=3}: {columns?: number}) {
-    const { animateCursor } = useCursorContext();
-
-  const mouseEnterHandler = () => {
-    animateCursor("buttonHover");
-  };
-  const mouseLeaveHandler = () => {
-    animateCursor("cursorLeave");
-  };
-
+export default function Works({ columns = 3 }: { columns?: number }) {
   return (
     <section
       id="works"
@@ -52,24 +34,28 @@ export default function Works({columns=3}: {columns?: number}) {
       </div>
 
       {/* Works Grid */}
-      <div className={`mx-auto w-full grid grid-cols-1 md:grid-cols-${columns} gap-8`}>
+      <div
+        className={`mx-auto w-full grid grid-cols-1 gap-8 ${
+          columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
+        }`}
+      >
         {projects.map((work, index) => (
           <Link href={`/works/${work.id}`} key={work.id}>
             <motion.div
               className="group"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: index * 0.1,
-                ease: [0.22, 1, 0.36, 1]
+                ease: [0.22, 1, 0.36, 1],
               }}
-              whileHover={{ 
+              whileHover={{
                 y: -8,
-                transition: { 
+                transition: {
                   duration: 0.4,
-                  ease: [0.22, 1, 0.36, 1]
-                }
+                  ease: [0.22, 1, 0.36, 1],
+                },
               }}
             >
               {/* Work Type Badge */}
@@ -79,7 +65,7 @@ export default function Works({columns=3}: {columns?: number}) {
                   {work.type}
                 </span>
               </div>
-            
+
               <div className="flex items-center justify-between">
                 <div className="mb-4">
                   <h3 className="text-xl font-bold mb-1 group-hover:text-white transition-colors duration-300">
@@ -102,14 +88,14 @@ export default function Works({columns=3}: {columns?: number}) {
                   "
                 />
               </div>
-            
+
               {/* Work Image with Overlay */}
               <div
-                className={`relative w-full ${columns === 2 ? 'aspect-video' : 'aspect-square'} overflow-hidden bg-neutral-900 rounded-sm`}
+                className={`relative w-full ${columns === 2 ? "aspect-video" : "aspect-square"} overflow-hidden bg-neutral-900 rounded-sm`}
               >
                 {/* Subtle gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                
+
                 {/* Image */}
                 <Image
                   src={work.image || "/placeholder.svg"}
@@ -117,7 +103,7 @@ export default function Works({columns=3}: {columns?: number}) {
                   fill
                   className="object-cover transition-all duration-700 ease-out group-hover:scale-105 group-hover:brightness-110"
                 />
-                
+
                 {/* Subtle border highlight */}
                 <div className="absolute inset-0 border border-white/0 group-hover:border-white/10 transition-colors duration-500 rounded-sm"></div>
               </div>

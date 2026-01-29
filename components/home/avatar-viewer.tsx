@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { SkeletonUtils } from "three-stdlib";
 
 export function AvatarModel() {
-  const { scene } = useGLTF("/avatar.glb");
+  const { scene } = useGLTF("/TuananhDo_Portfolio/avatar.glb");
   const groupRef = useRef<THREE.Group>(null);
   const bonesMapRef = useRef<Map<string, THREE.Bone>>(new Map());
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -391,4 +391,4 @@ export function AvatarModel() {
   return <group ref={groupRef} />;
 }
 
-useGLTF.preload("/avatar.glb");
+useGLTF.preload("/TuananhDo_Portfolio/avatar.glb");

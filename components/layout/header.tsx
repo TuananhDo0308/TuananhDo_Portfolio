@@ -68,7 +68,7 @@ export default function Header() {
           transition={{ duration: 0.2 }}
         >
           <Image
-            src="/Applogo.png"
+            src="/TuananhDo_Portfolio/Applogo.png"
             alt="Logo"
             width={40}
             height={40}

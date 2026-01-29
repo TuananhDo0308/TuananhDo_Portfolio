@@ -25,7 +25,7 @@ export const projects: ProjectDetail[] = [
     type: "INTERNSHIP",
     title: "Event Management App [Bosch Global]",
     description: "Web Application with CMS & Chatbot Integration",
-    image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=500&fit=crop",
+    image: "/TuananhDo_Portfolio/images/Beacon.png",
     category: "UX/UI Design & Development",
     year: "2025",
     client: "Bosch Global Software Vietnam",
@@ -48,7 +48,7 @@ export const projects: ProjectDetail[] = [
     type: "PRODUCTION",
     title: "Viqium AI",
     description: "AI Chatbot Platform for E-commerce",
-    image: "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=500&h=500&fit=crop",
+    image: "/TuananhDo_Portfolio/images/Viqium.png",
     category: "Web Development",
     year: "2024",
     client: "Viqium AI",
@@ -72,7 +72,7 @@ export const projects: ProjectDetail[] = [
     type: "PRODUCTION",
     title: "Skye Education",
     description: "Tutor-Student Booking Platform",
-    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=500&h=500&fit=crop",
+    image: "/TuananhDo_Portfolio/images/Sky.png",
     category: "Web Development",
     year: "2024",
     client: "Skye Education",
@@ -96,7 +96,7 @@ export const projects: ProjectDetail[] = [
     type: "RESEARCH",
     title: "Smart Nutrition Management",
     description: "AI-Powered Food Analysis Mobile App",
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500&h=500&fit=crop",
+    image: "/TuananhDo_Portfolio/images/Nutri.png",
     category: "Mobile Development & AI",
     year: "2024",
     client: "HCMC University of Education",
@@ -115,30 +115,30 @@ export const projects: ProjectDetail[] = [
     tags: ["React Native", "AI/ML", "Python", "Redux", "Computer Vision"],
     githubUrl: "https://github.com/TuananhDo0308/nutrition-app-mobile",
   },
-  {
-    id: 5,
-    type: "CASE STUDY",
-    title: "Real-Time Meeting Platform",
-    description: "Video Conferencing & Chat Application",
-    image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=500&h=500&fit=crop",
-    category: "Full-Stack Development",
-    year: "2024",
-    client: "Personal Project",
-    role: "Full-Stack Developer",
-    challenge:
-      "Virtual collaboration tools needed better real-time communication with low latency. Existing solutions were either too complex or lacked essential features like simultaneous video calls and chat. Security and performance were critical requirements.",
-    solution:
-      "Developed full-stack application using Next.js frontend and Java Spring Boot backend. Implemented WebSocket connections with StompJS for real-time chat and PeerJS for peer-to-peer video calls. Designed responsive UI with Tailwind CSS and integrated Spring Security for authentication.",
-    result:
-      "Created a functional real-time meeting platform with low-latency video calls and chat functionality. Achieved secure authentication and robust performance through Spring Boot backend. Demonstrated full-stack development capabilities with modern technologies.",
-    images: [
-      "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop",
-    ],
-    tags: ["Next.js", "Spring Boot", "WebSocket", "PeerJS", "Real-time"],
-    githubUrl: "https://github.com/TuananhDo0308/videoCall",
-  },
+  // {
+  //   id: 5,
+  //   type: "CASE STUDY",
+  //   title: "Real-Time Meeting Platform",
+  //   description: "Video Conferencing & Chat Application",
+  //   image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=500&h=500&fit=crop",
+  //   category: "Full-Stack Development",
+  //   year: "2024",
+  //   client: "Personal Project",
+  //   role: "Full-Stack Developer",
+  //   challenge:
+  //     "Virtual collaboration tools needed better real-time communication with low latency. Existing solutions were either too complex or lacked essential features like simultaneous video calls and chat. Security and performance were critical requirements.",
+  //   solution:
+  //     "Developed full-stack application using Next.js frontend and Java Spring Boot backend. Implemented WebSocket connections with StompJS for real-time chat and PeerJS for peer-to-peer video calls. Designed responsive UI with Tailwind CSS and integrated Spring Security for authentication.",
+  //   result:
+  //     "Created a functional real-time meeting platform with low-latency video calls and chat functionality. Achieved secure authentication and robust performance through Spring Boot backend. Demonstrated full-stack development capabilities with modern technologies.",
+  //   images: [
+  //     "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=1200&h=600&fit=crop",
+  //     "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop",
+  //     "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop",
+  //   ],
+  //   tags: ["Next.js", "Spring Boot", "WebSocket", "PeerJS", "Real-time"],
+  //   githubUrl: "https://github.com/TuananhDo0308/videoCall",
+  // },
 ];
 
 export function getProjectById(id: number): ProjectDetail | undefined {
