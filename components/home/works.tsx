@@ -51,9 +51,9 @@ export default function Works({
         }`}
       >
         {displayedProjects.map((work, index) => (
-          <Link href={`/works/${work.id}`} key={work.id}>
+          <Link href={`/projects/${work.id}`} key={work.id}>
             <motion.div
-              className="group "
+              className="group"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

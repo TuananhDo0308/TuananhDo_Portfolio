@@ -14,20 +14,9 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
   return (
     <main className="bg-black text-white min-h-screen">
       {/* Header with back button */}
-      <header className="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-neutral-800">
-        <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
-          <Link
-            href="/#works"
-            className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft size={20} />
-            <span>Back to Works</span>
-          </Link>
-        </div>
-      </header>
 
       {/* Hero Image */}
-      <section className="w-full h-96 md:h-screen relative overflow-hidden">
+      <section className="w-full h-96 md:h-120 relative overflow-hidden">
         <motion.div
           className="absolute inset-0"
           initial={{ scale: 1.1 }}
@@ -47,7 +36,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       </section>
 
       {/* Project Content */}
-      <section className="max-w-7xl mx-auto px-8 py-20">
+      <section className=" mx-auto px-8 py-20">
         {/* Title and Meta */}
         <motion.div
           className="mb-16"
