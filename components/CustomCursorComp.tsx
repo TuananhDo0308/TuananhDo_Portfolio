@@ -3,47 +3,95 @@ import { useEffect } from 'react';
 import { useCursorContext } from '../components/CursorContext';
 
 function Cursor() {
-  const { animateCursorVariant } = useCursorContext() as {
-    animateCursorVariant: 'cursorLeave' | 'buttonHover';
-  };
-
+  const { initialCursorVariant, animateCursorVariant, animateCursor } = useCursorContext();
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
 
   const variants = {
-    cursorLeave: {
-      scale: 1,
-      boxShadow: '0 0 0 1px #fff',
+    cursorEnter: {
+      border: '1px solid #ffffff',
+      boxShadow: '0 0 1px 0px #ffffff inset, 0 0 1px 0px #ffffff',
+      scale: 1.5,
+      borderRadius: '50%',
       backgroundColor: 'transparent',
-      transition: { duration: 0.2 },
+      transition: {
+        duration: 0.2,
+      },
+    },
+    cursorLeave: {
+      scale: 0,
+      border: 0,
+      backgroundColor: 'transparent',
+      transition: {
+        duration: 0.2,
+      },
     },
     buttonHover: {
       scale: 0,
-      boxShadow: '0 0 0 0px #fff',
+      border: 0,
       backgroundColor: 'transparent',
-      transition: { duration: 0.2 },
+      transition: {
+        duration: 0.2,
+      },
+    },
+    click: {
+      scale: 0.8,
+      backgroundColor: '#ffffff',
+      transition: {
+        duration: 0.1,
+      },
     },
   };
 
   useEffect(() => {
+    const app = document.body;
+
     const mouseMoveHandler = (e: MouseEvent) => {
       cursorX.set(e.clientX - 12);
       cursorY.set(e.clientY - 12);
     };
 
+    const mouseEnterHandler = () => {
+      animateCursor('cursorEnter');
+    };
+
+    const mouseLeaveHandler = () => {
+      animateCursor('cursorLeave');
+    };
+
+    const mouseDownHandler = () => {
+      animateCursor('click');
+    };
+
+    const mouseUpHandler = () => {
+      animateCursor('cursorEnter');
+    };
+
     window.addEventListener('mousemove', mouseMoveHandler);
-    return () => window.removeEventListener('mousemove', mouseMoveHandler);
-  }, [cursorX, cursorY]);
+    app.addEventListener('mouseenter', mouseEnterHandler);
+    app.addEventListener('mouseleave', mouseLeaveHandler);
+    app.addEventListener('mousedown', mouseDownHandler);
+    app.addEventListener('mouseup', mouseUpHandler);
+
+    return () => {
+      window.removeEventListener('mousemove', mouseMoveHandler);
+      app.removeEventListener('mouseenter', mouseEnterHandler);
+      app.removeEventListener('mouseleave', mouseLeaveHandler);
+      app.removeEventListener('mousedown', mouseDownHandler);
+      app.removeEventListener('mouseup', mouseUpHandler);
+    };
+  }, [animateCursor, cursorX, cursorY]);
 
   return (
     <motion.div
       className="cursor"
       variants={variants}
+      initial={initialCursorVariant}
       animate={animateCursorVariant}
-      initial={false}
       style={{
-        x: cursorX,
-        y: cursorY,
+        translateX: cursorX,
+        translateY: cursorY,
+        transformOrigin: 'center',
       }}
     />
   );

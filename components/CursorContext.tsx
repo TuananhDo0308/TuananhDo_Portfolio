@@ -1,30 +1,46 @@
 import { createContext, useState, useContext, ReactNode } from 'react';
 
-type CursorVariant = 'cursorLeave' | 'buttonHover';
-
 interface CursorContextType {
-  animateCursorVariant: CursorVariant;
-  animateCursor: (variant: CursorVariant) => void;
+  initialCursorVariant: string;
+  setInitialCursorVariant: (variant: string) => void;
+  animateCursorVariant: string;
+  setAnimateCursorVariant: (variant: string) => void;
+  animateCursor: (variant: string) => void;
 }
 
-const CursorContext = createContext<CursorContextType | null>(null);
+const CursorContext = createContext<CursorContextType | undefined>(undefined);
 
 export const useCursorContext = () => {
-  const ctx = useContext(CursorContext);
-  if (!ctx) throw new Error('CursorContext not found');
-  return ctx;
+  const context = useContext(CursorContext);
+  if (!context) {
+    throw new Error('useCursorContext must be used within CursorContextProvider');
+  }
+  return context;
 };
 
-export const CursorContextProvider = ({ children }: { children: ReactNode }) => {
-  const [animateCursorVariant, setAnimateCursorVariant] =
-    useState<CursorVariant>('cursorLeave');
+interface CursorContextProviderProps {
+  children: ReactNode;
+}
 
-  const animateCursor = (variant: CursorVariant) => {
+export const CursorContextProvider = ({ children }: CursorContextProviderProps) => {
+  const [initialCursorVariant, setInitialCursorVariant] = useState<string>('');
+  const [animateCursorVariant, setAnimateCursorVariant] = useState<string>('');
+
+  const animateCursor = (variant: string) => {
+    setInitialCursorVariant(animateCursorVariant);
     setAnimateCursorVariant(variant);
   };
 
   return (
-    <CursorContext.Provider value={{ animateCursorVariant, animateCursor }}>
+    <CursorContext.Provider
+      value={{
+        initialCursorVariant,
+        setInitialCursorVariant,
+        animateCursorVariant,
+        setAnimateCursorVariant,
+        animateCursor,
+      }}
+    >
       {children}
     </CursorContext.Provider>
   );

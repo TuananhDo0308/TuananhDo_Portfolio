@@ -35,14 +35,14 @@ export default function Header() {
     animateCursor("buttonHover");
   };
   const mouseLeaveHandler = () => {
-    animateCursor("cursorLeave");
+    animateCursor("cursorEnter");
   };
 
   const navLinks = [
     { href: "/", label: "Home" },
-        { href: "/works", label: "Works" },
-    { href: "#about", label: "About" },
-    { href: "#contact", label: "Contact" },
+        { href: "/projects", label: "Projects" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ];
 
   const handleLinkClick = () => {
@@ -79,9 +79,9 @@ export default function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link, index) => (
-            <motion.a
+            <Link key={link.href} href={link.href}>
+            <motion.div
               key={link.href}
-              href={link.href}
               className="text-lg relative group "
               onMouseEnter={mouseEnterHandler}
               onMouseLeave={mouseLeaveHandler}
@@ -95,7 +95,7 @@ export default function Header() {
               <span className="relative z-10 transition-colors duration-200 text-white/50 hover:text-white">
                 {link.label}
               </span>
-            </motion.a>
+            </motion.div></Link>
           ))}
         </nav>
 
@@ -164,9 +164,10 @@ export default function Header() {
               transition={{ duration: 0.3, delay: 0.1 }}
             >
               {navLinks.map((link, index) => (
-                <motion.a
+                            <Link key={link.href} href={link.href}>
+
+                <motion.div
                   key={link.href}
-                  href={link.href}
                   className="text-4xl font-bold text-white/50 hover:text-white transition-colors relative overflow-hidden"
                   onClick={handleLinkClick}
                   onMouseEnter={mouseEnterHandler}
@@ -189,7 +190,8 @@ export default function Header() {
                     whileHover={{ scaleX: 1 }}
                     transition={{ duration: 0.3 }}
                   />
-                </motion.a>
+                </motion.div>
+                </Link>
               ))}
 
               {/* Social Links or Extra Info (optional) */}

@@ -51,14 +51,15 @@ html, body {
 
 /* Custom Cursor */
 .cursor {
-  position: fixed;
   width: 24px;
   height: 24px;
-  /* border: 2px solid #ffffff; */
-  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9999;
 }
+
 button, a {
   cursor: none !important;
 }

@@ -5,9 +5,13 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   const socialLinks = [
-    { name: "Instagram", url: "https://instagram.com" },
-    { name: "LinkedIn", url: "https://linkedin.com" },
-    { name: "Facebook", url: "https://facebook.com" },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/do-tran-tuan-anh-68b2a2317/" },    
+    { name: "GitHub", url: "https://github.com/TuananhDo0308" },
+
+    { name: "Facebook", url: "https://www.facebook.com/TuananhDo0308/" },
+        { name: "Instagram", url: "https://www.instagram.com/dohtanh/" },
+
+
   
   ];
 

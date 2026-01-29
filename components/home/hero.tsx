@@ -16,7 +16,7 @@ export default function HeroSection() {
     animateCursor("buttonHover");
   };
   const mouseLeaveHandler = () => {
-    animateCursor("cursorLeave");
+    animateCursor("cursorEnter");
   };
 
   return (
@@ -41,13 +41,13 @@ export default function HeroSection() {
                   {/* Glow */}
 
                   {/* Text */}
-                    <TypewriterEffect
-                      words={[
-                        {text: "Tuan Anh" },
-    { text: "Frontend Developer" },
-    {text: "TuananhDo" },
-  ]}
-                    />
+                  <TypewriterEffect
+                    words={[
+                      { text: "Fullstack Developer" },
+                      { text: "Frontend Developer" },
+                      { text: "TuananhDo" },
+                    ]}
+                  />
                 </div>
 
                 {/* Triangle pointer */}
@@ -106,19 +106,13 @@ export default function HeroSection() {
             textShadow: "0 0 20px rgba(59, 130, 246, 0.8)",
           }}
         >
-          Frontend
+          Tuấn Anh
           <motion.span
             className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-blue-500 to-transparent"
             initial={{ width: 0 }}
             whileHover={{ width: "100%" }}
             transition={{ duration: 0.3 }}
           />
-        </motion.h2>
-        <motion.h2
-          className="text-white/50 text-6xl md:text-7xl lg:text-8xl font-bold leading-20 tracking-tighter"
-          transition={{ duration: 0.3 }}
-        >
-          Developer
         </motion.h2>
       </motion.div>
 

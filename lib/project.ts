@@ -115,30 +115,152 @@ export const projects: ProjectDetail[] = [
     tags: ["React Native", "AI/ML", "Python", "Redux", "Computer Vision"],
     githubUrl: "https://github.com/TuananhDo0308/nutrition-app-mobile",
   },
-  // {
-  //   id: 5,
-  //   type: "CASE STUDY",
-  //   title: "Real-Time Meeting Platform",
-  //   description: "Video Conferencing & Chat Application",
-  //   image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=500&h=500&fit=crop",
-  //   category: "Full-Stack Development",
-  //   year: "2024",
-  //   client: "Personal Project",
-  //   role: "Full-Stack Developer",
-  //   challenge:
-  //     "Virtual collaboration tools needed better real-time communication with low latency. Existing solutions were either too complex or lacked essential features like simultaneous video calls and chat. Security and performance were critical requirements.",
-  //   solution:
-  //     "Developed full-stack application using Next.js frontend and Java Spring Boot backend. Implemented WebSocket connections with StompJS for real-time chat and PeerJS for peer-to-peer video calls. Designed responsive UI with Tailwind CSS and integrated Spring Security for authentication.",
-  //   result:
-  //     "Created a functional real-time meeting platform with low-latency video calls and chat functionality. Achieved secure authentication and robust performance through Spring Boot backend. Demonstrated full-stack development capabilities with modern technologies.",
-  //   images: [
-  //     "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=1200&h=600&fit=crop",
-  //     "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop",
-  //     "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop",
-  //   ],
-  //   tags: ["Next.js", "Spring Boot", "WebSocket", "PeerJS", "Real-time"],
-  //   githubUrl: "https://github.com/TuananhDo0308/videoCall",
-  // },
+   {
+    id: 6,
+    type: "UNIVERSITY PROJECT",
+    title: "Flowlite - Task Management System",
+    description: "Modern Task Management Platform for Teams",
+    image: "/TuananhDo_Portfolio/images/Flowlite.png",
+    category: "Full-Stack Development",
+    year: "2024",
+    client: "HCMC University of Education",
+    role: "Frontend Developer",
+    challenge:
+      "Teams needed an intuitive task management platform that combined project organization, team collaboration, and progress tracking. The system required real-time updates, drag-and-drop functionality, and comprehensive analytics while maintaining a clean, responsive interface.",
+    solution:
+      "Built a modern web application using Next.js 16 and React 19 with TypeScript. Implemented Redux Toolkit for state management with redux-persist for data persistence. Created a Kanban board with drag-and-drop functionality using React DnD, integrated ApexCharts for analytics visualization, and designed a responsive UI with Tailwind CSS v4 and Framer Motion animations.",
+    result:
+      "Successfully delivered a full-featured task management system with Kanban boards, list views, real-time task updates, team collaboration features, and visual analytics dashboards. The application supports multiple projects, role-based access, commenting system, and dark/light mode themes. Built as part of Advanced Software Engineering course with a team of 5 developers.",
+    images: [
+      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop",
+    ],
+    tags: ["Next.js", "React 19", "TypeScript", "Redux Toolkit", "Tailwind CSS", "Framer Motion", "React DnD"],
+    githubUrl: "https://github.com/tquocan04/mini-management-project",
+  },
+  {
+    id: 5,
+    type: "CASE STUDY",
+    title: "Real-Time Meeting Platform",
+    description: "Video Conferencing & Chat Application",
+    image: "/TuananhDo_Portfolio/images/Video.png",
+    category: "Full-Stack Development",
+    year: "2024",
+    client: "Personal Project",
+    role: "Full-Stack Developer",
+    challenge:
+      "Virtual collaboration tools needed better real-time communication with low latency. Existing solutions were either too complex or lacked essential features like simultaneous video calls and chat. Security and performance were critical requirements.",
+    solution:
+      "Developed full-stack application using Next.js frontend and Java Spring Boot backend. Implemented WebSocket connections with StompJS for real-time chat and PeerJS for peer-to-peer video calls. Designed responsive UI with Tailwind CSS and integrated Spring Security for authentication.",
+    result:
+      "Created a functional real-time meeting platform with low-latency video calls and chat functionality. Achieved secure authentication and robust performance through Spring Boot backend. Demonstrated full-stack development capabilities with modern technologies.",
+    images: [
+      "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop",
+    ],
+    tags: ["Next.js", "Spring Boot", "WebSocket", "PeerJS", "Real-time"],
+    githubUrl: "https://github.com/TuananhDo0308/videoCall",
+  },
+ 
+  {
+    id: 7,
+    type: "CASE STUDY",
+    title: "Water Bottle E-commerce Platform",
+    description: "E-commerce Website with AI Recommendations",
+    image: "/TuananhDo_Portfolio/images/Arc.png",
+    category: "Web Development",
+    year: "2024",
+    client: "Arc Coffee",
+    role: "Frontend Developer",
+    challenge:
+      "E-commerce businesses needed a modern platform with personalized product recommendations. The system required a user-facing store, admin dashboard for product management, secure checkout, and AI-driven recommendations to enhance shopping experience.",
+    solution:
+      "Developed frontend using Next.js with dynamic UI powered by Framer Motion animations. Implemented user-friendly cart and checkout system with Google sign-in via NextAuth. Integrated Gemini API for AI-powered personalized product recommendations. Created admin dashboard with Apexcharts for revenue analytics and product management.",
+    result:
+      "Successfully launched an e-commerce platform with seamless shopping experience, secure authentication, AI-driven product suggestions, and comprehensive admin tools for inventory and revenue management. The platform features responsive design and smooth animations throughout.",
+    images: [
+      "https://images.unsplash.com/photo-1523294587484-bae6cc870010?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&h=600&fit=crop",
+    ],
+    tags: ["Next.js", "Framer Motion", "Tailwind CSS", "NextAuth", "Gemini API", "Redux Toolkit"],
+    githubUrl: "https://github.com/TuananhDo0308/arccoffee",
+  },
+  {
+    id: 9,
+    type: "CASE STUDY",
+    title: "Coffee Management System",
+    description: "Desktop Application for Coffee Shop Operations",
+    image: "/TuananhDo_Portfolio/images/Coffee.png",
+    category: "Desktop Development",
+    year: "2024",
+    client: "Coffee Shop",
+    role: "Full-Stack Developer",
+    challenge:
+      "Coffee shops needed an efficient management system to handle different operational roles including admin revenue tracking, employee order processing, and barista order viewing. The system required role-based access control and real-time data analytics.",
+    solution:
+      "Developed a full-stack desktop application using .NET Core and WPF. Created separate interfaces tailored for admin (revenue and employee management with chart analytics), employees (order processing), and baristas (order viewing). Integrated MS SQL Server for efficient data storage, retrieval, and chart-based analytics visualization.",
+    result:
+      "Successfully delivered a comprehensive coffee shop management system with role-specific interfaces, real-time order tracking, revenue analytics with visual charts, and employee management capabilities. The system streamlined operations across different user roles.",
+    images: [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1200&h=600&fit=crop",
+    ],
+    tags: [".NET Core", "WPF", "MS SQL Server", "Desktop App"],
+    githubUrl: "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF",
+  },
+  {
+    id: 10,
+    type: "CASE STUDY",
+    title: "Algorithm Visualization Tool",
+    description: "Interactive Graph Algorithm Visualizer",
+    image: "/TuananhDo_Portfolio/images/Graph.png",
+    category: "Web Development & Education",
+    year: "2024",
+    client: "Educational Tool",
+    role: "Frontend Developer",
+    challenge:
+      "Students learning graph algorithms struggle to understand complex concepts like Prim's and Ford-Bellman algorithms. The challenge was to create an intuitive tool that visualizes these algorithms step-by-step with interactive graph creation and manipulation.",
+    solution:
+      "Developed a web-based visualization tool using HTML/CSS, JavaScript, and D3.js library for interactive graph rendering. Implemented features for creating directed and undirected graphs with drag-and-drop nodes, step-by-step algorithm visualization, and graph import/export as text files for enhanced usability.",
+    result:
+      "Successfully created an educational tool that helps students understand graph algorithms through interactive visualization. The tool supports custom graph creation, real-time algorithm execution with step-by-step breakdown, and data persistence through file import/export.",
+    images: [
+      "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=600&fit=crop",
+    ],
+    tags: ["JavaScript", "D3.js", "HTML/CSS", "Algorithm Visualization"],
+    liveUrl: "https://graph-umber.vercel.app",
+    githubUrl: "https://github.com/TuananhDo0308/GRAPH",
+  },
+  {
+    id: 11,
+    type: "GAME DEVELOPMENT",
+    title: "2D Top-down Car Racing Game",
+    description: "Unity-based Racing Game with Time Challenges",
+    image: "/TuananhDo_Portfolio/images/Race.png",
+    category: "Game Development",
+    year: "2024",
+    client: "Personal Project",
+    role: "Game Developer",
+    challenge:
+      "Create an engaging 2D racing game with increasing difficulty levels that keeps players motivated to improve their performance. The game needed smooth car controls, diverse track designs, and a competitive element through time-based challenges.",
+    solution:
+      "Developed a complete 2D top-down racing game using Unity and C#. Designed 6 levels with increasing difficulty featuring diverse track layouts. Implemented smooth car physics and controls for responsive gameplay. Created a time-based challenge system with record-saving functionality to encourage replayability and competition.",
+    result:
+      "Successfully created an engaging racing game with intuitive controls, progressively challenging levels, and a competitive record-keeping system. Players can track their best times and continuously improve their performance across all levels.",
+    images: [
+      "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=600&fit=crop",
+    ],
+    tags: ["Unity", "C#", "Game Development", "2D Game"],
+    githubUrl: "https://github.com/TuananhDo0308/Car-Game-Unity",
+  }
 ];
 
 export function getProjectById(id: number): ProjectDetail | undefined {

@@ -186,7 +186,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
         >
           {project.prevProject ? (
             <Link href={`/project/${project.prevProject}`}>
-              <div className="group cursor-pointer">
+              <div className="group ">
                 <p className="text-sm text-neutral-500 uppercase tracking-widest mb-2">
                   Previous Project
                 </p>
@@ -202,7 +202,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
 
           {project.nextProject ? (
             <Link href={`/project/${project.nextProject}`} className="text-right">
-              <div className="group cursor-pointer">
+              <div className="group ">
                 <p className="text-sm text-neutral-500 uppercase tracking-widest mb-2">
                   Next Project
                 </p>
