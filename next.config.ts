@@ -1,9 +1,8 @@
-/** @type {import('next').NextConfig} */
-const repo = "TuananhDo_Portfolio";
+import type { NextConfig } from "next";
 
-module.exports = {
-  output: "export",
-  basePath: `/${repo}`,
-  assetPrefix: `/${repo}/`,
-  images: { unoptimized: true },
+const nextConfig: NextConfig = {
+  reactStrictMode: false, // Tạm thời tắt để test
+  
 };
+
+export default nextConfig;
