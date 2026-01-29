@@ -19,6 +19,24 @@
   }
 }
 
+/* Custom Cursor */
+.cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  /* border: 2px solid #ffffff; */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+}
+button, a {
+  cursor: none !important;
+}
+
+html {
+  cursor: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
