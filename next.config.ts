@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 
-const nextConfig: NextConfig = {
-  reactStrictMode: false, // Tạm thời tắt để test
+const nextConfig = {
+  reactStrictMode: false,
+  basePath: isProd ? "/TuananhDo_Portfolio" : "",
+  assetPrefix: isProd ? "/TuananhDo_Portfolio/" : "",
 };
 
-export default nextConfig;
+module.exports = nextConfig;
