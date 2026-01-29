@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     url: "https://tuananhdo0308.github.io/TuananhDo_Portfolio",
     images: [
       {
-        url: "/TuananhDo_Portfolio/metaimage.png",
+        url: "https://tuananhdo0308.github.io/TuananhDo_Portfolio/metaimage.png",
         width: 1200,
         height: 630,
         alt: "Tuan Anh Do Portfolio Preview",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     title: "Tuan Anh Do - Frontend Developer",
     description:
       "Creative frontend developer crafting beautiful, interactive digital experiences with modern web technologies.",
-    images: ["/TuananhDo_Portfolio/metaimage.png"],
+    images: ["https://tuananhdo0308.github.io/TuananhDo_Portfolio/metaimage.png"],
   },
 };
 
