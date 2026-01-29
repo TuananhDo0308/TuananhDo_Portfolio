@@ -69,7 +69,7 @@ export function AvatarModel() {
     clonedScene.scale.setScalar(scale);
     clonedScene.position.set(
       -center.x * scale,
-  -center.y * scale - 0.2, // 👈 hạ xuống
+      -center.y * scale - 0.2, // 👈 hạ xuống
       -center.z * scale,
     );
 
