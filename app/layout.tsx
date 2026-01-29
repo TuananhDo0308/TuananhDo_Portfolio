@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     description:
       "Creative frontend developer crafting beautiful, interactive digital experiences with modern web technologies.",
     siteName: "Tuan Anh Do Portfolio",
+    url: "https://tuananhdo0308.github.io/TuananhDo_Portfolio",
     images: [
       {
         url: "/TuananhDo_Portfolio/metaimage.png",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-
+  
   twitter: {
     card: "summary_large_image",
     title: "Tuan Anh Do - Frontend Developer",
