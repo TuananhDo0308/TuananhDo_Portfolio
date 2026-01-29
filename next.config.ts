@@ -1,15 +1,9 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === "production";
+const repo = "TuananhDo_Portfolio";
 
-const nextConfig = {
-  reactStrictMode: false,
-    output: "export",              // BẮT BUỘC cho GitHub Pages
-
-  basePath: isProd ? "/TuananhDo_Portfolio" : "",
-  assetPrefix: isProd ? "/TuananhDo_Portfolio/" : "",
-   images: {
-    unoptimized: true,           // cần cho static export
-  },
+module.exports = {
+  output: "export",
+  basePath: `/${repo}`,
+  assetPrefix: `/${repo}/`,
+  images: { unoptimized: true },
 };
-
-module.exports = nextConfig;

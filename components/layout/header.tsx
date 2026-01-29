@@ -58,7 +58,7 @@ export default function Header() {
       >
         {/* Logo with subtle hover effect */}
         <motion.div
-          className="w-10 h-10 flex items-center justify-center relative z-50 cursor-pointer"
+          className="w-10 h-10 flex items-center justify-center relative z-50 "
           onMouseEnter={mouseEnterHandler}
           onMouseLeave={mouseLeaveHandler}
           whileHover={{ scale: 1.05 }}
@@ -79,7 +79,7 @@ export default function Header() {
             <motion.a
               key={link.href}
               href={link.href}
-              className="text-lg relative group cursor-pointer"
+              className="text-lg relative group "
               onMouseEnter={mouseEnterHandler}
               onMouseLeave={mouseLeaveHandler}
               initial={{ opacity: 0 }}
