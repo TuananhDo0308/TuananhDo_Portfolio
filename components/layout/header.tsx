@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
-import { useCursorContext } from "../CursorContext";
+import { useCursorContext } from "@/components/CursorContext";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Header() {
   const { animateCursor } = useCursorContext();
@@ -38,9 +39,9 @@ export default function Header() {
   };
 
   const navLinks = [
-    { href: "#home", label: "Home" },
+    { href: "/", label: "Home" },
+        { href: "/works", label: "Works" },
     { href: "#about", label: "About" },
-    { href: "#works", label: "Works" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -57,6 +58,7 @@ export default function Header() {
         transition={{ duration: 0.5 }}
       >
         {/* Logo with subtle hover effect */}
+        <Link href="/" aria-label="Home">
         <motion.div
           className="w-10 h-10 flex items-center justify-center relative z-50 "
           onMouseEnter={mouseEnterHandler}
@@ -73,6 +75,7 @@ export default function Header() {
             className="w-8 h-8"
           />
         </motion.div>
+        </Link>
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link, index) => (

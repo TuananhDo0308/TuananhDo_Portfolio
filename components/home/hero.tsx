@@ -4,10 +4,13 @@ import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center } from "@react-three/drei";
 import { AvatarModel } from "./avatar-viewer";
-import { useCursorContext } from "../CursorContext";
+import { useCursorContext } from "@/components/CursorContext";
+import { useLenis } from "lenis/react";
+import { TypewriterEffect } from "../ui/typewriter-effect";
 
 export default function HeroSection() {
   const { animateCursor } = useCursorContext();
+  const lenis = useLenis();
 
   const mouseEnterHandler = () => {
     animateCursor("buttonHover");
@@ -17,30 +20,42 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-black">
+    <section
+      id="hero"
+      className="relative w-full h-screen overflow-hidden bg-black"
+    >
       {/* 3D Canvas - Avatar in Center with hover effect */}
       <div className="absolute inset-0 z-10 flex items-center justify-center">
         <div className="w-full h-full max-w-2xl">
           <div className="absolute inset-0 z-10">
             {/* NAME TAG */}
-            <div className="pointer-events-none absolute top-[15%] left-1/2 -translate-x-1/2 z-20">
+            <motion.div
+              className="pointer-events-none absolute top-[15%] left-1/2 -translate-x-1/2 z-20"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            >
               <div className="relative flex flex-col items-center">
                 {/* Tag box */}
                 <div className="relative px-5 py-1.5 rounded-md bg-white backdrop-blur-sm">
                   {/* Glow */}
 
                   {/* Text */}
-                  <p className="relative text-black text-sm tracking-wider font-semibold">
-                    Tuan Anh
-                  </p>
+                    <TypewriterEffect
+                      words={[
+                        {text: "Tuan Anh" },
+    { text: "Frontend Developer" },
+    {text: "TuananhDo" },
+  ]}
+                    />
                 </div>
 
                 {/* Triangle pointer */}
                 <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[10px] border-l-transparent border-r-transparent border-t-white"></div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* <Suspense
+            <Suspense
               fallback={
                 <div className="flex items-center justify-center h-full text-white">
                   Loading...
@@ -71,13 +86,18 @@ export default function HeroSection() {
 
                 <Environment preset="sunset" />
               </Canvas>
-            </Suspense> */}
+            </Suspense>
           </div>
         </div>
       </div>
 
       {/* Left Side Text - Frontend Developer with enhanced effects */}
-      <motion.div className="absolute left-8 bottom-8 group z-20 ">
+      <motion.div
+        className="absolute left-8 bottom-8 group z-20"
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+      >
         <motion.h2
           onMouseEnter={mouseEnterHandler}
           onMouseLeave={mouseLeaveHandler}
@@ -103,7 +123,12 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Bottom Right - Scroll Indicator with pulse effect */}
-      <div className="absolute bottom-8 right-8 z-20">
+      <motion.div
+        className="absolute bottom-8 right-8 z-20"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+      >
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
@@ -123,6 +148,9 @@ export default function HeroSection() {
               borderColor: "#ffffff",
               boxShadow: "0 0 20px rgba(255, 255, 255, 0.8)",
             }}
+            onClick={() =>
+              lenis?.scrollTo("#works", { offset: 0, duration: 2 })
+            }
             whileTap={{ scale: 0.9 }}
           >
             {/* Ripple effect on hover */}
@@ -152,7 +180,7 @@ export default function HeroSection() {
             </svg>
           </motion.button>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

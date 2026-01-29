@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
-import Header from '@/components/layout/header'
-import { CursorContextProvider } from '@/components/CursorContext'
-import Cursor from '@/components/CustomCursorComp'
 import Layout from '@/components/layout/layout'
 export const metadata: Metadata = {
   title: 'TuananhDo - Frontend Developer',
@@ -34,6 +30,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
   return (
     <html lang="en" className="dark">
       <body className={`font-sans antialiased bg-black text-white`}>          
