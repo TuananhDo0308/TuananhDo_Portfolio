@@ -26,7 +26,7 @@ export default function HeroSection() {
     >
       {/* 3D Canvas - Avatar in Center with hover effect */}
       <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <div className="w-full h-full max-w-2xl">
+        <div className="w-full h-full max-w-md md:max-w-2xl">
           <div className="absolute inset-0 z-10">
             {/* NAME TAG */}
             <motion.div
@@ -101,7 +101,7 @@ export default function HeroSection() {
         <motion.h2
           onMouseEnter={mouseEnterHandler}
           onMouseLeave={mouseLeaveHandler}
-          className="text-white text-6xl md:text-7xl lg:text-8xl font-bold leading-4 md:leading-10 lg:leading-20 relative"
+          className="text-white text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight relative"
           whileHover={{
             textShadow: "0 0 20px rgba(59, 130, 246, 0.8)",
           }}

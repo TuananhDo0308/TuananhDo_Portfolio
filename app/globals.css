@@ -3,7 +3,9 @@
 
 @custom-variant dark (&:is(.dark *));
 html, body {
-  overflow-x: clip;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 @theme inline {
@@ -58,6 +60,15 @@ html, body {
   left: 0;
   pointer-events: none;
   z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .cursor {
+    display: none !important;
+  }
+  button, a, html {
+    cursor: auto !important;
+  }
 }
 
 button, a {

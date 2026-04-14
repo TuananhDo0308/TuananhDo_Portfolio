@@ -84,7 +84,7 @@ export default function Footer() {
         className="space-y-12"
       >
 <div className="relative w-full overflow-hidden py-12">
-  <h2 className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[10vw]">
+  <h2 className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[8vw] md:text-[10vw]">
     @tuananhdo
   </h2>
 </div>

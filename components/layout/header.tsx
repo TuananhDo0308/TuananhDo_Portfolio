@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 w-full px-8 py-5 text-white flex justify-between bg-black items-center z-50 transition-all duration-300"
+        className="fixed top-0 left-0 w-full px-4 md:px-8 py-5 text-white flex justify-between bg-black items-center z-50 transition-all duration-300"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}

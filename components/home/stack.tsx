@@ -13,17 +13,17 @@ const stacks = [
 
 export default function Stack() {
   return (
-    <section className="relative bg-black text-white py-24">
-      <div className="mx-auto px-8">
+    <section className="relative bg-black text-white py-12 md:py-24">
+      <div className="mx-auto px-4 md:px-8">
         <motion.div
           initial={{ scaleX: 0 }}
           whileInView={{ scaleX: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="border-t border-white/10 p-8 w-full origin-left"
+          className="border-t border-white/10 p-4 md:p-8 w-full origin-left"
         />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 py-40 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 py-20 md:py-40 items-center">
           {/* Left Side - Focus Label */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -33,7 +33,7 @@ export default function Stack() {
             className="flex flex-col items-start h-full justify-start"
           >
             <div className="relative">
-              <h2 className="text-3xl lg:text-5xl font-medium">Focus <ArrowDownRight className="inline w-8 h-8" /></h2>
+              <h2 className="text-2xl md:text-3xl lg:text-5xl font-medium">Focus <ArrowDownRight className="inline w-6 h-6 md:w-8 md:h-8" /></h2>
           
             </div>
             <motion.p
@@ -55,7 +55,7 @@ export default function Stack() {
             viewport={{ once: true }}
             className="flex items-start justify-start"
           >
-            <div className="space-y-6 w-full">
+            <div className="space-y-4 md:space-y-6 w-full">
               {stacks.map((stack, index) => {
                 return (
                   <motion.div
@@ -67,7 +67,7 @@ export default function Stack() {
                     whileHover={{ x: 10 }}
                     className="group flex items-center gap-4 cursor-default"
                   >
-                    <Link href={stack.href} className="text-4xl lg:text-5xl font-bold text-white group-hover:text-neutral-300 transition-colors duration-300">
+                    <Link href={stack.href} className="text-2xl md:text-4xl lg:text-5xl font-bold text-white group-hover:text-neutral-300 transition-colors duration-300">
                       {stack.name}
                     </Link>
                   </motion.div>

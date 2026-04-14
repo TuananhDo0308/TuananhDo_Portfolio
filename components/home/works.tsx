@@ -20,12 +20,12 @@ export default function Works({
   return (
     <section
       id="works"
-      className="relative w-full bg-black text-white min-h-screen flex flex-col py-40 px-8"
+      className="relative w-full bg-black text-white min-h-screen flex flex-col py-20 md:py-40 px-4 md:px-8"
     >
       {/* Section Header */}
-      <div className="mx-auto w-full flex justify-between items-start mb-16">
+      <div className="mx-auto w-full flex justify-between items-start mb-8 md:mb-16">
         <motion.h1
-          className="text-7xl md:text-8xl font-bold"
+          className="text-4xl md:text-8xl font-bold"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -34,7 +34,7 @@ export default function Works({
           Projects
         </motion.h1>
         <motion.div
-          className="text-5xl md:text-7xl font-light text-white/30"
+          className="text-2xl md:text-7xl font-light text-white/30"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
