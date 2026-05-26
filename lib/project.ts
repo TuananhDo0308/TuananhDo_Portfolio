@@ -2,6 +2,10 @@ export interface ProjectDetail {
   id: number;
   type: string;
   title: string;
+  link?: {
+    type: string;
+    url: string;
+  };
   description: string;
   image: string;
   category: string;
@@ -25,6 +29,7 @@ export const projects: ProjectDetail[] = [
     type: "INTERNSHIP",
     title: "Event Management App [Bosch Global]",
     description: "Web Application with CMS & Chatbot Integration",
+    
     image: "/TuananhDo_Portfolio/images/Beacon.png",
     category: "UX/UI Design & Development",
     year: "2025",
@@ -37,9 +42,11 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully delivered a fully functional event management system with seamless SSO integration, responsive design across all devices, and enhanced user engagement through chatbot features. Currently in production at Bosch Global Software Vietnam.",
     images: [
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779815598/image_1_hvnf1c.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779815598/image_3_rf8xgd.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779815599/image_20_hd6wa5.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779815599/image_10_gjjfw1.png ",
+
     ],
     tags: ["React", "Tailwind CSS", "Azure SSO", "Agile", "Chatbot Integration"],
   },
@@ -47,6 +54,10 @@ export const projects: ProjectDetail[] = [
     id: 2,
     type: "PRODUCTION",
     title: "Viqium AI",
+    link: {
+      type: "Product",
+      url: "https://www.viqium.com/",
+    },
     description: "AI Chatbot Platform for E-commerce",
     image: "/TuananhDo_Portfolio/images/Viqium.png",
     category: "Web Development",
@@ -77,6 +88,10 @@ export const projects: ProjectDetail[] = [
     year: "2024",
     client: "Skye Education",
     role: "Frontend Developer",
+    link: {
+      type: "Product",
+      url: "https://skyeeducation.com",
+    },
     challenge:
       "Educational institutions needed a modern platform to connect tutors and students efficiently. The system required secure authentication, engaging animations, and automated CI/CD pipelines for reliable deployment.",
     solution:
@@ -84,9 +99,8 @@ export const projects: ProjectDetail[] = [
     result:
       "Launched production platform at skyeeducation.com with seamless tutor-student booking functionality. Achieved automated deployment pipeline, ensuring code quality and reducing deployment time. Platform successfully connects educators and students with enhanced user experience.",
     images: [
-      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779816079/Screenshot_2026-05-27_at_00.19.55_owbxcx.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779816085/Screenshot_2026-05-27_at_00.20.32_dxxbd6.png",
     ],
     tags: ["Next.js", "Framer Motion", "AWS", "Docker", "CI/CD", "NextAuth"],
     liveUrl: "https://skyeeducation.com",
@@ -96,6 +110,10 @@ export const projects: ProjectDetail[] = [
     type: "RESEARCH",
     title: "Smart Nutrition Management",
     description: "AI-Powered Food Analysis Mobile App",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/TuananhDo0308/nutrition-app-mobile.git",
+    },
     image: "/TuananhDo_Portfolio/images/Nutri.png",
     category: "Mobile Development & AI",
     year: "2024",
@@ -108,9 +126,8 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully published research in the Asian Journal of Research in Computer Science (DOI: 10.9734/ajrcos/2025/v18i5650). Won 2nd Prize at Faculty Level, Encouragement Prize at University Level, and 3rd Prize at Ministry Level Scientific Research Competition. Created a functional app that automates nutritional tracking.",
     images: [
-      "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1547592180-85f173990554?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779816839/Frame_3_from_Figma_fxmlcc.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779816839/Frame_2_from_Figma_ndtfzq.png",
     ],
     tags: ["React Native", "AI/ML", "Python", "Redux", "Computer Vision"],
     githubUrl: "https://github.com/TuananhDo0308/nutrition-app-mobile",
@@ -121,6 +138,10 @@ export const projects: ProjectDetail[] = [
     title: "Flowlite - Task Management System",
     description: "Modern Task Management Platform for Teams",
     image: "/TuananhDo_Portfolio/images/Flowlite.png",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/tquocan04/mini-management-project.git",
+    },
     category: "Full-Stack Development",
     year: "2024",
     client: "HCMC University of Education",
@@ -132,9 +153,9 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully delivered a full-featured task management system with Kanban boards, list views, real-time task updates, team collaboration features, and visual analytics dashboards. The application supports multiple projects, role-based access, commenting system, and dark/light mode themes. Built as part of Advanced Software Engineering course with a team of 5 developers.",
     images: [
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817140/Screenshot_2026-05-27_at_00.37.55_rzk3km.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817140/Screenshot_2026-05-27_at_00.37.51_htl7ip.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817141/Screenshot_2026-05-27_at_00.38.37_emz4nl.png",
     ],
     tags: ["Next.js", "React 19", "TypeScript", "Redux Toolkit", "Tailwind CSS", "Framer Motion", "React DnD"],
     githubUrl: "https://github.com/tquocan04/mini-management-project",
@@ -146,6 +167,10 @@ export const projects: ProjectDetail[] = [
     description: "Video Conferencing & Chat Application",
     image: "/TuananhDo_Portfolio/images/Video.png",
     category: "Full-Stack Development",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/TuananhDo0308/videoCall.git",
+    },
     year: "2024",
     client: "Personal Project",
     role: "Full-Stack Developer",
@@ -156,9 +181,9 @@ export const projects: ProjectDetail[] = [
     result:
       "Created a functional real-time meeting platform with low-latency video calls and chat functionality. Achieved secure authentication and robust performance through Spring Boot backend. Demonstrated full-stack development capabilities with modern technologies.",
     images: [
-      "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop",
+      "https://github.com/TuananhDo0308/videoCall/raw/main/media/4.png",
+      "https://github.com/TuananhDo0308/videoCall/raw/main/media/2.png",
+      "https://github.com/TuananhDo0308/videoCall/raw/main/media/1.png",
     ],
     tags: ["Next.js", "Spring Boot", "WebSocket", "PeerJS", "Real-time"],
     githubUrl: "https://github.com/TuananhDo0308/videoCall",
@@ -170,6 +195,10 @@ export const projects: ProjectDetail[] = [
     title: "Water Bottle E-commerce Platform",
     description: "E-commerce Website with AI Recommendations",
     image: "/TuananhDo_Portfolio/images/Arc.png",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/TuananhDo0308/arccoffee.git",
+    },
     category: "Web Development",
     year: "2024",
     client: "Arc Coffee",
@@ -181,9 +210,11 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully launched an e-commerce platform with seamless shopping experience, secure authentication, AI-driven product suggestions, and comprehensive admin tools for inventory and revenue management. The platform features responsive design and smooth animations throughout.",
     images: [
-      "https://images.unsplash.com/photo-1523294587484-bae6cc870010?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1200&h=600&fit=crop",
+      "https://github.com/TuananhDo0308/arccoffee/raw/main/public/images/home.png",
+      "https://github.com/TuananhDo0308/arccoffee/raw/main/public/images/product.png",
+      "https://github.com/TuananhDo0308/arccoffee/raw/main/public/images/cart.png",
+      "https://github.com/TuananhDo0308/arccoffee/raw/main/public/images/Ai1.png",
+      "https://github.com/TuananhDo0308/arccoffee/raw/main/public/images/Ai2.png"
     ],
     tags: ["Next.js", "Framer Motion", "Tailwind CSS", "NextAuth", "Gemini API", "Redux Toolkit"],
     githubUrl: "https://github.com/TuananhDo0308/arccoffee",
@@ -192,6 +223,10 @@ export const projects: ProjectDetail[] = [
     id: 9,
     type: "CASE STUDY",
     title: "Coffee Management System",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF.git",
+    },
     description: "Desktop Application for Coffee Shop Operations",
     image: "/TuananhDo_Portfolio/images/Coffee.png",
     category: "Desktop Development",
@@ -205,9 +240,9 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully delivered a comprehensive coffee shop management system with role-specific interfaces, real-time order tracking, revenue analytics with visual charts, and employee management capabilities. The system streamlined operations across different user roles.",
     images: [
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1200&h=600&fit=crop",
+      "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF/raw/main/media/login.png",
+      "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF/raw/main/media/product.png",
+      "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF/raw/main/media/employee.png",
     ],
     tags: [".NET Core", "WPF", "MS SQL Server", "Desktop App"],
     githubUrl: "https://github.com/TuananhDo0308/CoffeeShop-Management-WPF",
@@ -219,6 +254,10 @@ export const projects: ProjectDetail[] = [
     description: "Interactive Graph Algorithm Visualizer",
     image: "/TuananhDo_Portfolio/images/Graph.png",
     category: "Web Development & Education",
+    link: {
+      type: "Product",
+      url: "https://tuananhdo0308.github.io/GRAPH/",
+    },
     year: "2024",
     client: "Educational Tool",
     role: "Frontend Developer",
@@ -229,9 +268,9 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully created an educational tool that helps students understand graph algorithms through interactive visualization. The tool supports custom graph creation, real-time algorithm execution with step-by-step breakdown, and data persistence through file import/export.",
     images: [
-      "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817785/Screenshot_2026-05-27_at_00.49.21_oyw5vi.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817785/Screenshot_2026-05-27_at_00.48.34_ithp4s.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779817785/Screenshot_2026-05-27_at_00.48.27_et6ic4.png",
     ],
     tags: ["JavaScript", "D3.js", "HTML/CSS", "Algorithm Visualization"],
     liveUrl: "https://graph-umber.vercel.app",
@@ -243,6 +282,10 @@ export const projects: ProjectDetail[] = [
     title: "2D Top-down Car Racing Game",
     description: "Unity-based Racing Game with Time Challenges",
     image: "/TuananhDo_Portfolio/images/Race.png",
+    link: {
+      type: "GitHub",
+      url: "https://github.com/TuananhDo0308/Car-Game-Unity",
+    },
     category: "Game Development",
     year: "2024",
     client: "Personal Project",
@@ -254,9 +297,10 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully created an engaging racing game with intuitive controls, progressively challenging levels, and a competitive record-keeping system. Players can track their best times and continuously improve their performance across all levels.",
     images: [
-      "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=600&fit=crop",
+      "https://github.com/TuananhDo0308/Car-Game-Unity/raw/new-branch/media/home.png",
+      "https://github.com/TuananhDo0308/Car-Game-Unity/raw/new-branch/media/game.png",
+      "https://github.com/TuananhDo0308/Car-Game-Unity/raw/new-branch/media/game2.png",
+      "https://github.com/TuananhDo0308/Car-Game-Unity/raw/new-branch/media/winning.png"
     ],
     tags: ["Unity", "C#", "Game Development", "2D Game"],
     githubUrl: "https://github.com/TuananhDo0308/Car-Game-Unity",

@@ -52,6 +52,26 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
           </div>
           <h1 className="text-6xl md:text-7xl font-bold mb-4">{project.title}</h1>
           <p className="text-xl text-neutral-400 max-w-3xl">{project.description}</p>
+
+          {project.link && (
+            <motion.div
+              className="mt-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <a
+                href={project.link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 bg-neutral-900 text-neutral-300 rounded-full text-sm"
+              >
+                {project.link.type === "Product"
+                  ? "Visit Product"
+                  : "View on GitHub"}
+              </a>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Project Meta Grid */}
@@ -130,7 +150,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
             {project.images.map((image, index) => (
               <motion.div
                 key={index}
-                className="relative w-full aspect-video rounded-lg overflow-hidden"
+                className="relative w-full aspect-video  overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -139,7 +159,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
                   src={image || "/placeholder.svg"}
                   alt={`${project.title} - Image ${index + 1}`}
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  className="object-contain "
                 />
               </motion.div>
             ))}
