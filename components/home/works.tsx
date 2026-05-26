@@ -7,10 +7,10 @@ import { useCursorContext } from "../CursorContext";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { projects } from "@/lib/project";
 
-export default function Works({ 
-  columns = 3, 
-  isHome = false 
-}: { 
+export default function Works({
+  columns = 3,
+  isHome = false,
+}: {
   columns?: number;
   isHome?: boolean;
 }) {
@@ -40,7 +40,9 @@ export default function Works({
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          {isHome ? `${displayedProjects.length}/${projects.length}` : projects.length}
+          {isHome
+            ? `${displayedProjects.length}/${projects.length}`
+            : projects.length}
         </motion.div>
       </div>
 
@@ -142,7 +144,7 @@ export default function Works({
             >
               {/* Background animation on hover */}
               <span className="absolute inset-0 bg-neutral-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left"></span>
-              
+
               {/* Button content */}
               <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                 View All Projects
