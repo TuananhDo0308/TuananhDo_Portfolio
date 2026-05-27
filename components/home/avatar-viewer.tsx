@@ -180,8 +180,8 @@ export function AvatarModel() {
 
         // Random target position (giới hạn phạm vi để trông tự nhiên)
         targetLookPosRef.current = {
-          x: (Math.random() - 0.5) * 1.5, // -0.75 đến 0.75
-          y: (Math.random() - 0.5) * 1.2, // -0.6 đến 0.6
+          x: (Math.random() - 0.5) * 0.8,
+          y: (Math.random() - 0.5) * 0.6,
         };
       }
 
@@ -270,38 +270,54 @@ export function AvatarModel() {
     // Sử dụng mouse position (desktop) hoặc auto-look position (mobile)
     const activeLookPos = isMobile ? currentLookPosRef.current : mousePos;
 
-    const targetRotationY = activeLookPos.x * 0.5;
-    const targetRotationX = -activeLookPos.y * 0.5;
+    const targetRotationY = THREE.MathUtils.clamp(
+      activeLookPos.x * 0.28,
+      -0.35,
+      0.35,
+    );
+    const targetRotationX = THREE.MathUtils.clamp(
+      -activeLookPos.y * 0.18,
+      -0.22,
+      0.22,
+    );
 
     const idleHeadMovement = {
-      y: Math.sin(timeRef.current * 0.3) * 0.05,
-      x: Math.cos(timeRef.current * 0.4) * 0.03,
+      y: Math.sin(timeRef.current * 0.3) * 0.02,
+      x: Math.cos(timeRef.current * 0.4) * 0.015,
     };
 
     // Head - moves the most (100%)
     if (headBone) {
       headBone.rotation.y = THREE.MathUtils.lerp(
         headBone.rotation.y,
-        targetRotationY + idleHeadMovement.y,
+        THREE.MathUtils.clamp(
+          targetRotationY + idleHeadMovement.y,
+          -0.35,
+          0.35,
+        ),
         cappedDelta * 5,
       );
       headBone.rotation.x = THREE.MathUtils.lerp(
         headBone.rotation.x,
-        targetRotationX + idleHeadMovement.x,
+        THREE.MathUtils.clamp(
+          targetRotationX + idleHeadMovement.x,
+          -0.22,
+          0.22,
+        ),
         cappedDelta * 5,
       );
     }
 
-    // Neck - follows 30% of head movement
+    // Neck - follows the head gently so it never twists behind the body.
     if (neckBone) {
       neckBone.rotation.y = THREE.MathUtils.lerp(
         neckBone.rotation.y,
-        targetRotationY * 0.3,
+        THREE.MathUtils.clamp(targetRotationY * 0.18, -0.1, 0.1),
         cappedDelta * 4,
       );
       neckBone.rotation.x = THREE.MathUtils.lerp(
         neckBone.rotation.x,
-        targetRotationX * 0.3,
+        THREE.MathUtils.clamp(targetRotationX * 0.15, -0.08, 0.08),
         cappedDelta * 4,
       );
     }
@@ -310,12 +326,12 @@ export function AvatarModel() {
     if (chestBone) {
       chestBone.rotation.y = THREE.MathUtils.lerp(
         chestBone.rotation.y,
-        targetRotationY * 0.2,
+        targetRotationY * 0.08,
         cappedDelta * 3.5,
       );
       chestBone.rotation.x = THREE.MathUtils.lerp(
         chestBone.rotation.x,
-        targetRotationX * 0.15,
+        targetRotationX * 0.06,
         cappedDelta * 3.5,
       );
     }
@@ -324,12 +340,12 @@ export function AvatarModel() {
     if (spine2Bone && spine2Bone !== chestBone) {
       spine2Bone.rotation.y = THREE.MathUtils.lerp(
         spine2Bone.rotation.y,
-        targetRotationY * 0.15,
+        targetRotationY * 0.06,
         cappedDelta * 3,
       );
       spine2Bone.rotation.x = THREE.MathUtils.lerp(
         spine2Bone.rotation.x,
-        targetRotationX * 0.1,
+        targetRotationX * 0.04,
         cappedDelta * 3,
       );
     }
@@ -338,12 +354,12 @@ export function AvatarModel() {
     if (spine1Bone) {
       spine1Bone.rotation.y = THREE.MathUtils.lerp(
         spine1Bone.rotation.y,
-        targetRotationY * 0.1,
+        targetRotationY * 0.04,
         cappedDelta * 2.5,
       );
       spine1Bone.rotation.x = THREE.MathUtils.lerp(
         spine1Bone.rotation.x,
-        targetRotationX * 0.08,
+        targetRotationX * 0.03,
         cappedDelta * 2.5,
       );
     }
@@ -352,12 +368,12 @@ export function AvatarModel() {
     if (spineBone) {
       spineBone.rotation.y = THREE.MathUtils.lerp(
         spineBone.rotation.y,
-        targetRotationY * 0.05,
+        targetRotationY * 0.02,
         cappedDelta * 2,
       );
       spineBone.rotation.x = THREE.MathUtils.lerp(
         spineBone.rotation.x,
-        targetRotationX * 0.03,
+        targetRotationX * 0.015,
         cappedDelta * 2,
       );
     }
