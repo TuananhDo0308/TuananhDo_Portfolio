@@ -3,9 +3,23 @@
 
 @custom-variant dark (&:is(.dark *));
 html, body {
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
+  max-width: 100vw;
   position: relative;
+  background: #000;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
+}
+
+body {
+  min-width: 0;
+}
+
+@supports not (overflow: clip) {
+  html, body {
+    overflow-x: hidden;
+  }
 }
 
 @theme inline {

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ProjectDetail as ProjectDetailType } from "@/lib/project";
+import { ProjectDetail as ProjectDetailType, projects } from "@/lib/project";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface ProjectDetailProps {
@@ -36,7 +36,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       </section>
 
       {/* Project Content */}
-      <section className=" mx-auto px-8 py-20">
+      <section className=" mx-auto px-8 py-10 md:py-20">
         {/* Title and Meta */}
         <motion.div
           className="mb-16"
@@ -50,7 +50,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
               {project.type}
             </span>
           </div>
-          <h1 className="text-6xl md:text-7xl font-bold mb-4">{project.title}</h1>
+          <h1 className="text-4xl sm:text-5xl  md:text-7xl font-bold mb-4">{project.title}</h1>
           <p className="text-xl text-neutral-400 max-w-3xl">{project.description}</p>
 
           {project.link && (
@@ -186,45 +186,6 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
           </div>
         </motion.div>
 
-        {/* Navigation */}
-        <motion.div
-          className="border-t border-neutral-800 pt-16 grid grid-cols-2 gap-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          {project.prevProject ? (
-            <Link href={`/project/${project.prevProject}`}>
-              <div className="group ">
-                <p className="text-sm text-neutral-500 uppercase tracking-widest mb-2">
-                  Previous Project
-                </p>
-                <div className="flex items-center gap-2 group-hover:text-neutral-300 transition-colors">
-                  <ArrowLeft size={20} />
-                  <span className="text-lg font-semibold">View Previous</span>
-                </div>
-              </div>
-            </Link>
-          ) : (
-            <div />
-          )}
-
-          {project.nextProject ? (
-            <Link href={`/project/${project.nextProject}`} className="text-right">
-              <div className="group ">
-                <p className="text-sm text-neutral-500 uppercase tracking-widest mb-2">
-                  Next Project
-                </p>
-                <div className="flex items-center justify-end gap-2 group-hover:text-neutral-300 transition-colors">
-                  <span className="text-lg font-semibold">View Next</span>
-                  <ArrowRight size={20} />
-                </div>
-              </div>
-            </Link>
-          ) : (
-            <div />
-          )}
-        </motion.div>
       </section>
     </main>
   );

@@ -22,12 +22,12 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative w-full h-screen overflow-hidden bg-black"
+      className="relative w-full max-w-[100vw] h-screen overflow-hidden bg-black"
     >
       {/* 3D Canvas - Avatar in Center with hover effect */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <div className="w-full h-full max-w-md md:max-w-2xl">
-          <div className="absolute inset-0 z-10">
+      <div className="absolute inset-0 z-10 flex max-w-full items-center justify-center overflow-hidden">
+        <div className="relative h-full w-full max-w-md overflow-hidden md:max-w-2xl">
+          <div className="absolute inset-0 z-10 overflow-hidden">
             {/* NAME TAG */}
             <motion.div
               className="pointer-events-none absolute top-[15%] left-1/2 -translate-x-1/2 z-20"
@@ -93,7 +93,7 @@ export default function HeroSection() {
 
       {/* Left Side Text - Frontend Developer with enhanced effects */}
       <motion.div
-        className="absolute left-8 bottom-8 group z-20"
+        className="absolute left-4 md:left-8 bottom-8 group z-20"
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}

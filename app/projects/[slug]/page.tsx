@@ -1,25 +1,24 @@
-import { getProjectById, getAllProjectIds } from "@/lib/project";
+import { getAllProjectSlugs, getProjectBySlug } from "@/lib/project";
 import ProjectDetail from "@/components/projectDetail";
 import { notFound } from "next/navigation";
 
 interface ProjectPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const ids = getAllProjectIds();
-  return ids.map((id) => ({
-    id: id.toString(),
+  const slugs = getAllProjectSlugs();
+  return slugs.map((slug) => ({
+    slug,
   }));
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { id } = await params;
-  const projectId = parseInt(id, 10);
-  const project = getProjectById(projectId);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
 
   if (!project) {
-    notFound();
+    return notFound()
   }
 
   return <ProjectDetail project={project} />;

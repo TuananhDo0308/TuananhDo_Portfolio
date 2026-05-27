@@ -1,5 +1,6 @@
 export interface ProjectDetail {
   id: number;
+  slug: string;
   type: string;
   title: string;
   link?: {
@@ -17,8 +18,8 @@ export interface ProjectDetail {
   result: string;
   images: string[];
   tags: string[];
-  nextProject?: number;
-  prevProject?: number;
+  nextProject?: string;
+  prevProject?: string;
   liveUrl?: string;
   githubUrl?: string;
 }
@@ -26,6 +27,7 @@ export interface ProjectDetail {
 export const projects: ProjectDetail[] = [
   {
     id: 1,
+    slug: "event-management-app-bosch-global",
     type: "INTERNSHIP",
     title: "Event Management App [Bosch Global]",
     description: "Web Application with CMS & Chatbot Integration",
@@ -52,11 +54,12 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 2,
+    slug: "viqium-ai",
     type: "PRODUCTION",
     title: "Viqium AI",
     link: {
       type: "Product",
-      url: "https://www.viqium.com/",
+      url: "https://viqiumproduction.vercel.app/",
     },
     description: "AI Chatbot Platform for E-commerce",
     image: "/TuananhDo_Portfolio/images/Viqium.png",
@@ -71,15 +74,19 @@ export const projects: ProjectDetail[] = [
     result:
       "Successfully launched production platform at viqium.com. Enabled sellers to automate sales processes, reduce response time, and integrate chatbots across multiple channels. The embed code solution made integration seamless for non-technical users.",
     images: [
-      "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869307/Screenshot_2026-05-27_at_15.05.44_ry0ojo.png",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869418/Product_1_i5v0c2.webp",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869418/Voucher_1_pdciv2.webp",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869417/Product_3_pl79cz.webp",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869418/Information_from_Viqium_Production_bwcy6g.webp",
+      "https://res.cloudinary.com/dbwocyqha/image/upload/v1779869417/AI_Image_zxvpzj.webp",
     ],
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "NextAuth", "Redux Toolkit"],
     liveUrl: "https://viqium.com",
   },
   {
     id: 3,
+    slug: "skye-education",
     type: "PRODUCTION",
     title: "Skye Education",
     description: "Tutor-Student Booking Platform",
@@ -107,6 +114,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 4,
+    slug: "smart-nutrition-management",
     type: "RESEARCH",
     title: "Smart Nutrition Management",
     description: "AI-Powered Food Analysis Mobile App",
@@ -134,6 +142,7 @@ export const projects: ProjectDetail[] = [
   },
    {
     id: 6,
+    slug: "flowlite-task-management-system",
     type: "UNIVERSITY PROJECT",
     title: "Flowlite - Task Management System",
     description: "Modern Task Management Platform for Teams",
@@ -162,6 +171,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 5,
+    slug: "real-time-meeting-platform",
     type: "CASE STUDY",
     title: "Real-Time Meeting Platform",
     description: "Video Conferencing & Chat Application",
@@ -191,6 +201,7 @@ export const projects: ProjectDetail[] = [
  
   {
     id: 7,
+    slug: "water-bottle-ecommerce-platform",
     type: "CASE STUDY",
     title: "Water Bottle E-commerce Platform",
     description: "E-commerce Website with AI Recommendations",
@@ -221,6 +232,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 9,
+    slug: "coffee-management-system",
     type: "CASE STUDY",
     title: "Coffee Management System",
     link: {
@@ -249,6 +261,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 10,
+    slug: "algorithm-visualization-tool",
     type: "CASE STUDY",
     title: "Algorithm Visualization Tool",
     description: "Interactive Graph Algorithm Visualizer",
@@ -278,6 +291,7 @@ export const projects: ProjectDetail[] = [
   },
   {
     id: 11,
+    slug: "2d-top-down-car-racing-game",
     type: "GAME DEVELOPMENT",
     title: "2D Top-down Car Racing Game",
     description: "Unity-based Racing Game with Time Challenges",
@@ -311,8 +325,16 @@ export function getProjectById(id: number): ProjectDetail | undefined {
   return projects.find((project) => project.id === id);
 }
 
+export function getProjectBySlug(slug: string): ProjectDetail | undefined {
+  return projects.find((project) => project.slug === slug);
+}
+
 export function getAllProjectIds(): number[] {
   return projects.map((project) => project.id);
+}
+
+export function getAllProjectSlugs(): string[] {
+  return projects.map((project) => project.slug);
 }
 
 export function getProjectsByType(type: string): ProjectDetail[] {
