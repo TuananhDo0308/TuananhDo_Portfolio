@@ -14,6 +14,7 @@ export default function Works({
   columns?: number;
   isHome?: boolean;
 }) {
+  const { animateCursor } = useCursorContext();
   // Limit to 6 projects if isHome is true
   const displayedProjects = isHome ? projects.slice(0, 6) : projects;
 
@@ -25,7 +26,9 @@ export default function Works({
       {/* Section Header */}
       <div className="mx-auto w-full flex justify-between items-start mb-8 md:mb-16">
         <motion.h1
-          className="text-4xl md:text-8xl font-bold"
+          className="text-4xl md:text-8xl font-bold select-none"
+          onMouseEnter={() => animateCursor("textHover")}
+          onMouseLeave={() => animateCursor("cursorEnter")}
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -49,11 +52,16 @@ export default function Works({
       {/* Works Grid */}
       <div
         className={`mx-auto w-full grid grid-cols-1 gap-8 ${
-          columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
+          columns === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"
         }`}
       >
         {displayedProjects.map((work, index) => (
-          <Link href={`/projects/${work.slug}`} key={work.id}>
+          <Link
+            href={`/projects/${work.slug}`}
+            key={work.id}
+            onMouseEnter={() => animateCursor("projectHover", "VIEW ↗")}
+            onMouseLeave={() => animateCursor("cursorEnter")}
+          >
             <motion.div
               className="group"
               initial={{ opacity: 0, y: 30 }}
@@ -72,27 +80,33 @@ export default function Works({
                 },
               }}
             >
-              {/* Work Type Badge */}
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 bg-neutral-500 rounded-full group-hover:bg-white transition-colors duration-300"></div>
-                <span className="text-xs font-semibold tracking-widest text-neutral-400 uppercase group-hover:text-neutral-200 transition-colors duration-300">
-                  {work.type}
-                </span>
+              {/* Work Type Badge & Year */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-neutral-500 group-hover:bg-white transition-colors duration-300"></div>
+                  <span className="text-xs font-semibold tracking-widest text-neutral-400 uppercase group-hover:text-neutral-200 transition-colors duration-300">
+                    {work.type}
+                  </span>
+                </div>
+                {work.year && (
+                  <span className="text-xs font-mono text-neutral-500">
+                    {work.year}
+                  </span>
+                )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="mb-4">
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
                   <h3 className="text-xl font-bold mb-1 group-hover:text-white transition-colors duration-300">
                     {work.title}
                   </h3>
-                  <p className="text-sm text-neutral-500 group-hover:text-neutral-300 transition-colors duration-300">
+                  <p className="text-sm text-neutral-500 group-hover:text-neutral-300 transition-colors duration-300 line-clamp-2">
                     {work.description}
                   </p>
                 </div>
                 <ArrowUpRight
                   className="
-                    mb-4
-                    text-neutral-500 group-hover:text-white
+                    text-neutral-500 group-hover:text-white shrink-0 mt-1
                     transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]
                     opacity-0 
                     -translate-x-3 translate-y-3
@@ -102,6 +116,28 @@ export default function Works({
                   "
                 />
               </div>
+
+              {/* Tech Stack Tags - Sharp rectangular chips */}
+              {work.tags && work.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {work.tags.slice(0, 4).map((tag) => (
+                    <span
+                      key={tag}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        animateCursor("tagHover");
+                      }}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        animateCursor("projectHover", "VIEW ↗");
+                      }}
+                      className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-neutral-400 border border-white/10 bg-white/[0.03] group-hover:border-white/20 transition-colors duration-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
 
               {/* Work Image with Overlay */}
               <div
@@ -119,7 +155,7 @@ export default function Works({
                 />
 
                 {/* Subtle border highlight */}
-                <div className="absolute inset-0 border border-white/0 group-hover:border-white/10 transition-colors duration-500 "></div>
+                <div className="absolute inset-0 border border-white/0 group-hover:border-white/20 transition-colors duration-500 pointer-events-none"></div>
               </div>
             </motion.div>
           </Link>
@@ -137,18 +173,20 @@ export default function Works({
         >
           <Link href="/projects">
             <motion.button
-              className="group relative px-8 py-4 bg-white text-black font-semibold rounded-full overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => animateCursor("buttonHover")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
+              className="group relative px-8 py-4 bg-white text-black font-semibold overflow-hidden border border-white uppercase tracking-wider text-xs"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
               {/* Background animation on hover */}
-              <span className="absolute inset-0 bg-neutral-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left"></span>
+              <span className="absolute inset-0 bg-neutral-900 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out origin-left"></span>
 
               {/* Button content */}
               <span className="relative flex items-center gap-2 group-hover:text-white transition-colors duration-300">
                 View All Projects
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
               </span>
             </motion.button>
           </Link>

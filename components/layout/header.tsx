@@ -52,7 +52,11 @@ export default function Header() {
   return (
     <>
       <motion.header
-        className="fixed inset-x-0 top-0 box-border max-w-[100vw] overflow-hidden px-4 md:px-8 py-5 text-white flex justify-between bg-black items-center z-50 transition-all duration-300"
+        className={`fixed inset-x-0 top-0 box-border max-w-[100vw] overflow-hidden px-4 md:px-8 text-white flex justify-between items-center z-50 transition-all duration-300 ${
+          isScrolled
+            ? "py-3.5 bg-black/75 backdrop-blur-md border-b border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+            : "py-5 bg-transparent border-b border-transparent"
+        }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}

@@ -2,8 +2,20 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useCursorContext } from "../CursorContext";
 
 export default function Footer() {
+  const { animateCursor } = useCursorContext();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText("TuananhDo0308@gmail.com");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
   const socialLinks = [
     { name: "LinkedIn", url: "https://www.linkedin.com/in/do-tran-tuan-anh-68b2a2317/" },    
     { name: "GitHub", url: "https://github.com/TuananhDo0308" },
@@ -33,7 +45,7 @@ export default function Footer() {
 
   return (
    
-    <footer id="footer" className="bg-black text-white pt-24 pb-8 px-8 border-t border-white/10">
+    <footer id="footer" className="bg-black text-white pt-24 pb-8 px-4 md:px-8 border-t border-white/10">
       {/* Top Section */}
       <motion.div
         className=" mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-24"
@@ -44,12 +56,28 @@ export default function Footer() {
       >
         {/* Left - Contact Info */}
         <motion.div variants={itemVariants} className="space-y-4">
-          <a
-            href="mailto:hello@example.com"
-            className="text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors block"
-          >
-            TuananhDo0308@gmail.com
-          </a>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href="mailto:TuananhDo0308@gmail.com"
+              onMouseEnter={() => animateCursor("copyHover", "MAIL ✉")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
+              className="text-xl sm:text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors break-all sm:break-normal"
+            >
+              TuananhDo0308@gmail.com
+            </a>
+            <button
+              onClick={handleCopy}
+              onMouseEnter={() =>
+                animateCursor("copyHover", copied ? "COPIED" : "COPY")
+              }
+              onMouseLeave={() => animateCursor("cursorEnter")}
+              type="button"
+              className="px-2.5 py-1 text-xs font-mono uppercase tracking-wider border border-white/20 hover:border-white text-neutral-300 hover:text-white transition-all bg-white/[0.04]"
+              title="Copy email to clipboard"
+            >
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
+          </div>
           <p className="text-white/50 text-base md:text-lg">
             Permanently located in
             <br />
@@ -65,6 +93,8 @@ export default function Footer() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
+              onMouseEnter={() => animateCursor("buttonHover")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
               className="block text-xl md:text-2xl font-semibold hover:text-white/70 transition-colors"
             >
               {social.name}
@@ -84,7 +114,11 @@ export default function Footer() {
         className="space-y-12"
       >
 <div className="relative w-full overflow-hidden py-12">
-  <h2 className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[8vw] md:text-[10vw]">
+  <h2
+    onMouseEnter={() => animateCursor("textHover")}
+    onMouseLeave={() => animateCursor("cursorEnter")}
+    className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[8vw] md:text-[10vw] select-none"
+  >
     @tuananhdo
   </h2>
 </div>

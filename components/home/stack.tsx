@@ -10,6 +10,7 @@ import {
   Icon,
 } from "lucide-react";
 import Link from "next/link";
+import { useCursorContext } from "@/components/CursorContext";
 
 const stacks = [
   { name: "React", href: "https://reactjs.org/" },
@@ -20,6 +21,7 @@ const stacks = [
 ];
 
 export default function Stack() {
+  const { animateCursor } = useCursorContext();
   return (
     <section className="relative bg-black text-white py-12 md:py-24">
       <div className="mx-auto px-4 md:px-8">
@@ -79,6 +81,10 @@ export default function Stack() {
                   >
                     <Link
                       href={stack.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onMouseEnter={() => animateCursor("buttonHover")}
+                      onMouseLeave={() => animateCursor("cursorEnter")}
                       className="text-2xl md:text-4xl lg:text-5xl font-bold text-white group-hover:text-neutral-300 transition-colors duration-300"
                     >
                       {stack.name}
