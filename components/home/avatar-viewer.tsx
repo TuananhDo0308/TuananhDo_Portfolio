@@ -10,15 +10,15 @@ export function AvatarModel() {
   const { scene } = useGLTF("/TuananhDo_Portfolio/avatar.glb");
   const groupRef = useRef<THREE.Group>(null);
   const bonesMapRef = useRef<Map<string, THREE.Bone>>(new Map());
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const { size } = useThree();
+  const mousePosRef = useRef({ x: 0, y: 0 });
+  const { gl } = useThree();
 
   // Animation states
   const timeRef = useRef(0);
   const blinkTimerRef = useRef(0);
   const blinkDurationRef = useRef(0);
   const isBlinkingRef = useRef(false);
-  const nextBlinkTimeRef = useRef(Math.random() * 3 + 2);
+  const nextBlinkTimeRef = useRef(3);
 
   // Auto-rotation state
   const autoRotationRef = useRef(0);
@@ -26,13 +26,13 @@ export function AvatarModel() {
   // Mobile auto-look states
   const [isMobile, setIsMobile] = useState(false);
   const lookChangeTimerRef = useRef(0);
-  const nextLookChangeRef = useRef(Math.random() * 3 + 4); // 4-7 giây
+  const nextLookChangeRef = useRef(5); // 4-7 giây
   const targetLookPosRef = useRef({ x: 0, y: 0 });
   const currentLookPosRef = useRef({ x: 0, y: 0 });
 
   // Track if page is visible
   const isPageVisibleRef = useRef(true);
-  const lastFrameTimeRef = useRef(Date.now());
+  const lastFrameTimeRef = useRef(0);
 
   // Detect mobile device
   useEffect(() => {
@@ -118,26 +118,60 @@ export function AvatarModel() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  // Track mouse position (only on desktop)
+  // Track mouse position relative to canvas/avatar center (only on desktop)
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (event: MouseEvent) => {
-      if (!isMobile) {
-        setMousePos({
-          x: (event.clientX / size.width) * 2 - 1,
-          y: -(event.clientY / size.height) * 2 + 1,
-        });
+      const rect = gl.domElement.getBoundingClientRect();
+      // If hero canvas is scrolled completely out of view, reset to center
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        mousePosRef.current = { x: 0, y: 0 };
+        return;
       }
+
+      // Horizontal center of the avatar canvas in viewport pixels
+      const centerX = rect.left + rect.width / 2;
+      // Vertical eye level of the avatar model (~35% from the top of the canvas)
+      const centerY = rect.top + rect.height * 0.35;
+
+      const deltaX = event.clientX - centerX;
+      const deltaY = event.clientY - centerY;
+
+      const maxDistX =
+        Math.max(centerX, window.innerWidth - centerX) || window.innerWidth / 2;
+      const maxDistY =
+        Math.max(centerY, window.innerHeight - centerY) ||
+        window.innerHeight / 2;
+
+      mousePosRef.current = {
+        x: THREE.MathUtils.clamp(deltaX / maxDistX, -1, 1),
+        y: THREE.MathUtils.clamp(-deltaY / maxDistY, -1, 1),
+      };
+    };
+
+    const handleMouseLeave = () => {
+      mousePosRef.current = { x: 0, y: 0 };
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [size, isMobile]);
+    document.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [gl, isMobile]);
 
   // Animate
   useFrame((state, delta) => {
     const cappedDelta = Math.min(delta, 0.1);
 
     const now = Date.now();
+    if (lastFrameTimeRef.current === 0) {
+      lastFrameTimeRef.current = now;
+      return;
+    }
     const timeSinceLastFrame = (now - lastFrameTimeRef.current) / 1000;
     lastFrameTimeRef.current = now;
 
@@ -268,7 +302,9 @@ export function AvatarModel() {
       bonesMapRef.current.get("UpperChest") || bonesMapRef.current.get("Chest");
 
     // Sử dụng mouse position (desktop) hoặc auto-look position (mobile)
-    const activeLookPos = isMobile ? currentLookPosRef.current : mousePos;
+    const activeLookPos = isMobile
+      ? currentLookPosRef.current
+      : mousePosRef.current;
 
     const targetRotationY = THREE.MathUtils.clamp(
       activeLookPos.x * 0.28,
