@@ -152,19 +152,16 @@ export default function AboutHero() {
                 src="/TuananhDo_Portfolio/images/profile.png"
                 alt="Đỗ Trần Tuấn Anh"
                 fill
-                className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                className="object-cover object-top group-hover:scale-105 transition-all duration-700 ease-out"
                 priority
               />
 
-              {/* Subtle gradient vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-
               {/* Corner Reticle & Metadata */}
-              <div className="absolute top-3 left-3 px-2 py-1 bg-black/80 backdrop-blur-xs border border-white/15 font-mono text-[10px] text-neutral-400 uppercase tracking-wider">
+              <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/15 font-mono text-[10px] text-neutral-300 uppercase tracking-wider">
                 // FIG. 01 — ANH DO
               </div>
 
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between font-mono text-[10px] text-neutral-400 uppercase tracking-wider">
+              <div className="absolute bottom-3 left-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/10 flex items-center justify-between font-mono text-[10px] text-neutral-300 uppercase tracking-wider">
                 <span>DEVELOPER & CREATIVE</span>
                 <span>HCMC, VN</span>
               </div>
