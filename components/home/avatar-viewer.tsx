@@ -21,14 +21,12 @@ export function AvatarModel() {
   const isBlinkingRef = useRef(false);
   const nextBlinkTimeRef = useRef(3);
 
-  // Waving & interactive gesture states
-  const isWavingRef = useRef(false);
-  const waveTimerRef = useRef(0);
-  const isNoddingRef = useRef(false);
-  const nodTimerRef = useRef(0);
-  const clickCountRef = useRef(0);
-  const lastClickTimeRef = useRef(0);
-  const currentSmileRef = useRef(0);
+  // Interactive reaction states: "Bụng cười" (Tickle) & "Mặt cọc" (Grumpy)
+  const isGrumpyRef = useRef(false);
+  const grumpyTimerRef = useRef(0);
+  const isTickledRef = useRef(false);
+  const tickleTimerRef = useRef(0);
+  const currentSmileRef = useRef(0.05);
 
   // Auto-rotation state
   const autoRotationRef = useRef(0);
@@ -44,40 +42,34 @@ export function AvatarModel() {
   const isPageVisibleRef = useRef(true);
   const lastFrameTimeRef = useRef(0);
 
-  const triggerWave = () => {
-    isWavingRef.current = true;
-    waveTimerRef.current = 0;
+  const triggerFaceGrumpy = () => {
+    isGrumpyRef.current = true;
+    grumpyTimerRef.current = 0;
+    isTickledRef.current = false;
+    tickleTimerRef.current = 0;
   };
 
-  const triggerNod = () => {
-    isNoddingRef.current = true;
-    nodTimerRef.current = 0;
+  const triggerBellyTickle = () => {
+    isTickledRef.current = true;
+    tickleTimerRef.current = 0;
+    isGrumpyRef.current = false;
+    grumpyTimerRef.current = 0;
   };
 
-  const handlePointerDown = () => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current < 500) {
-      clickCountRef.current += 1;
+  const handleAvatarClick = (e: any) => {
+    if (e.stopPropagation) e.stopPropagation();
+    const objName = e.object?.name || "";
+    const hitY = e.point?.y ?? 0;
+    // Scaled head is from y ~ 0.38 upwards, or mesh name matches Head/Face parts
+    const isFace =
+      /Head|Hair|Glasses|Eye|Teeth/i.test(objName) || hitY >= 0.38;
+
+    if (isFace) {
+      triggerFaceGrumpy();
     } else {
-      clickCountRef.current = 1;
-    }
-    lastClickTimeRef.current = now;
-
-    if (clickCountRef.current >= 3) {
-      triggerNod();
-      clickCountRef.current = 0;
-    } else {
-      triggerWave();
+      triggerBellyTickle();
     }
   };
-
-  // Friendly greeting wave on initial load
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      triggerWave();
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Detect mobile device
   useEffect(() => {
@@ -207,8 +199,14 @@ export function AvatarModel() {
       mousePosRef.current = { x: 0, y: 0 };
     };
 
-    const handleCanvasClick = () => {
-      handlePointerDown();
+    const handleCanvasClick = (event: MouseEvent) => {
+      const rect = gl.domElement.getBoundingClientRect();
+      const centerY = rect.top + rect.height * 0.35;
+      if (event.clientY < centerY) {
+        triggerFaceGrumpy();
+      } else {
+        triggerBellyTickle();
+      }
     };
 
     gl.domElement.style.cursor = "pointer";
@@ -294,10 +292,24 @@ export function AvatarModel() {
       );
     }
 
-    // === BREATHING ANIMATION ===
-    const breathingSpeed = 0.8;
-    const breathingAmount = 0.015;
-    const breathCycle = Math.sin(timeRef.current * breathingSpeed);
+    // === BREATHING & TICKLE GIGGLE ANIMATION ===
+    let breathScale = 1 + Math.sin(timeRef.current * 0.8) * 0.015;
+    if (isTickledRef.current) {
+      tickleTimerRef.current += cappedDelta;
+      if (tickleTimerRef.current < 2.2) {
+        // Rapid bouncy giggle pulse on chest/belly
+        breathScale += Math.abs(Math.sin(tickleTimerRef.current * 18)) * 0.08;
+      } else {
+        isTickledRef.current = false;
+      }
+    }
+
+    if (isGrumpyRef.current) {
+      grumpyTimerRef.current += cappedDelta;
+      if (grumpyTimerRef.current >= 2.2) {
+        isGrumpyRef.current = false;
+      }
+    }
 
     const chest =
       bonesMapRef.current.get("Spine1") ||
@@ -305,12 +317,13 @@ export function AvatarModel() {
       bonesMapRef.current.get("UpperChest");
 
     if (chest) {
-      chest.scale.setScalar(1 + breathCycle * breathingAmount);
+      chest.scale.setScalar(breathScale);
     }
 
-    // === BLINKING ANIMATION ===
+    // === BLINKING & EYE EXPRESSION ANIMATION ===
     if (
       !isBlinkingRef.current &&
+      !isGrumpyRef.current &&
       blinkTimerRef.current >= nextBlinkTimeRef.current
     ) {
       isBlinkingRef.current = true;
@@ -319,6 +332,7 @@ export function AvatarModel() {
       nextBlinkTimeRef.current = Math.random() * 3 + 2;
     }
 
+    let eyeScaleY = 1.0;
     if (isBlinkingRef.current) {
       blinkDurationRef.current += cappedDelta;
       const blinkLength = 0.15;
@@ -329,16 +343,31 @@ export function AvatarModel() {
       }
 
       const blinkAmount = Math.sin(blinkProgress * Math.PI) * 0.9;
+      eyeScaleY = 1 - blinkAmount;
+    } else if (isGrumpyRef.current) {
+      // Annoyed glaring squint
+      eyeScaleY = 0.45;
+    } else if (isTickledRef.current) {
+      // Laughing squint
+      eyeScaleY = 0.65;
+    }
 
-      const leftEye = bonesMapRef.current.get("LeftEye");
-      const rightEye = bonesMapRef.current.get("RightEye");
+    const leftEye = bonesMapRef.current.get("LeftEye");
+    const rightEye = bonesMapRef.current.get("RightEye");
 
-      if (leftEye) {
-        leftEye.scale.y = 1 - blinkAmount;
-      }
-      if (rightEye) {
-        rightEye.scale.y = 1 - blinkAmount;
-      }
+    if (leftEye) {
+      leftEye.scale.y = THREE.MathUtils.lerp(
+        leftEye.scale.y,
+        eyeScaleY,
+        cappedDelta * 12,
+      );
+    }
+    if (rightEye) {
+      rightEye.scale.y = THREE.MathUtils.lerp(
+        rightEye.scale.y,
+        eyeScaleY,
+        cappedDelta * 12,
+      );
     }
 
     // === SUBTLE IDLE SWAY (CHỈ DESKTOP) ===
@@ -384,12 +413,16 @@ export function AvatarModel() {
       x: Math.cos(timeRef.current * 0.4) * 0.015,
     };
 
-    // === SMILE BLENDSHAPE ===
+    // === SMILE & MOUTH BLENDSHAPES ===
     let targetSmile = 0.05;
-    if (isWavingRef.current) {
-      targetSmile = 0.75;
-    } else if (isNoddingRef.current) {
-      targetSmile = 0.7;
+    let targetMouthOpen = 0;
+
+    if (isTickledRef.current) {
+      targetSmile = 1.0;
+      targetMouthOpen = 0.15 + Math.sin(tickleTimerRef.current * 18) * 0.08;
+    } else if (isGrumpyRef.current) {
+      targetSmile = 0.0;
+      targetMouthOpen = 0.0;
     } else if (!isMobile) {
       const dist = Math.hypot(activeLookPos.x, activeLookPos.y);
       if (dist < 0.45) {
@@ -400,7 +433,7 @@ export function AvatarModel() {
     currentSmileRef.current = THREE.MathUtils.lerp(
       currentSmileRef.current,
       targetSmile,
-      cappedDelta * 6,
+      cappedDelta * 8,
     );
 
     morphMeshesRef.current.forEach((mesh) => {
@@ -409,25 +442,36 @@ export function AvatarModel() {
         if (typeof smileIdx === "number") {
           mesh.morphTargetInfluences[smileIdx] = currentSmileRef.current;
         }
+        const openIdx = mesh.morphTargetDictionary["mouthOpen"];
+        if (typeof openIdx === "number") {
+          mesh.morphTargetInfluences[openIdx] = THREE.MathUtils.lerp(
+            mesh.morphTargetInfluences[openIdx] || 0,
+            targetMouthOpen,
+            cappedDelta * 10,
+          );
+        }
       }
     });
 
     let extraHeadRotX = 0;
+    let extraHeadRotY = 0;
     let extraHeadRotZ = 0;
 
-    if (isWavingRef.current) {
-      const waveHeadTilt =
-        Math.sin(Math.PI * Math.min(waveTimerRef.current / 2.4, 1)) * -0.07;
-      extraHeadRotZ = waveHeadTilt;
-    }
-
-    if (isNoddingRef.current) {
-      nodTimerRef.current += cappedDelta;
-      if (nodTimerRef.current < 1.4) {
-        extraHeadRotX = Math.sin(nodTimerRef.current * 14) * 0.14;
-      } else {
-        isNoddingRef.current = false;
-      }
+    if (isTickledRef.current) {
+      const t = tickleTimerRef.current;
+      // Head tilts back slightly laughing with gentle bounce
+      extraHeadRotX = -0.09 + Math.sin(t * 18) * 0.03;
+      extraHeadRotZ = Math.sin(t * 9) * 0.04;
+    } else if (isGrumpyRef.current) {
+      const t = grumpyTimerRef.current;
+      // Annoyed head shake (lắc đầu quầy quậy phản đối)
+      const shakeDecay = Math.max(0, 1 - t / 1.6);
+      const headShake = Math.sin(t * 22) * 0.22 * shakeDecay;
+      // Turns head away in a huff (quay mặt đi lườm)
+      const turnAway = Math.min(t / 0.4, 1) * 0.3;
+      extraHeadRotY = turnAway + headShake;
+      extraHeadRotX = 0.06;
+      extraHeadRotZ = -0.05;
     }
 
     // Head - moves the most (100%)
@@ -435,25 +479,25 @@ export function AvatarModel() {
       headBone.rotation.y = THREE.MathUtils.lerp(
         headBone.rotation.y,
         THREE.MathUtils.clamp(
-          targetRotationY + idleHeadMovement.y,
-          -0.35,
-          0.35,
+          targetRotationY + idleHeadMovement.y + extraHeadRotY,
+          -0.6,
+          0.6,
         ),
-        cappedDelta * 5,
+        cappedDelta * 6,
       );
       headBone.rotation.x = THREE.MathUtils.lerp(
         headBone.rotation.x,
         THREE.MathUtils.clamp(
           targetRotationX + idleHeadMovement.x + extraHeadRotX,
-          -0.25,
-          0.25,
+          -0.35,
+          0.35,
         ),
-        cappedDelta * 5,
+        cappedDelta * 6,
       );
       headBone.rotation.z = THREE.MathUtils.lerp(
         headBone.rotation.z,
         extraHeadRotZ,
-        cappedDelta * 5,
+        cappedDelta * 6,
       );
     }
 
@@ -461,12 +505,20 @@ export function AvatarModel() {
     if (neckBone) {
       neckBone.rotation.y = THREE.MathUtils.lerp(
         neckBone.rotation.y,
-        THREE.MathUtils.clamp(targetRotationY * 0.18, -0.1, 0.1),
+        THREE.MathUtils.clamp(
+          (targetRotationY + extraHeadRotY) * 0.22,
+          -0.16,
+          0.16,
+        ),
         cappedDelta * 4,
       );
       neckBone.rotation.x = THREE.MathUtils.lerp(
         neckBone.rotation.x,
-        THREE.MathUtils.clamp(targetRotationX * 0.15, -0.08, 0.08),
+        THREE.MathUtils.clamp(
+          (targetRotationX + extraHeadRotX) * 0.18,
+          -0.1,
+          0.1,
+        ),
         cappedDelta * 4,
       );
     }
@@ -538,76 +590,62 @@ export function AvatarModel() {
       );
     }
 
-    // === ARM MOVEMENTS (IDLE SWAY & INTERACTIVE WAVE) ===
+    // === ARM MOVEMENTS (NATURAL IDLE & REACTIONS) ===
     const armSwaySpeed = 0.6;
-    const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.03;
+    const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.025;
 
     const rightArm = bonesMapRef.current.get("RightArm");
     const rightForeArm = bonesMapRef.current.get("RightForeArm");
     const rightHand = bonesMapRef.current.get("RightHand");
     const leftArm = bonesMapRef.current.get("LeftArm");
+    const leftForeArm = bonesMapRef.current.get("LeftForeArm");
+    const leftHand = bonesMapRef.current.get("LeftHand");
+
+    let armReactZ = 0;
+    let forearmReactZ = 0;
+
+    if (isTickledRef.current) {
+      // Gentle laughter bounce on arms
+      armReactZ = Math.sin(tickleTimerRef.current * 18) * 0.03;
+      forearmReactZ = Math.sin(tickleTimerRef.current * 18) * 0.05;
+    } else if (isGrumpyRef.current) {
+      // Tense arms slightly closer to sides
+      armReactZ = -0.04;
+    }
 
     if (leftArm) {
       leftArm.rotation.x = 1.2;
       leftArm.rotation.y = 0;
-      leftArm.rotation.z = -armSway;
+      leftArm.rotation.z = -armSway - armReactZ;
     }
-
-    let waveWeight = 0;
-    let waveCycle = 0;
-
-    if (isWavingRef.current) {
-      waveTimerRef.current += cappedDelta;
-      const t = waveTimerRef.current;
-
-      if (t < 0.4) {
-        // Raise arm smoothly (0s -> 0.4s)
-        const p = t / 0.4;
-        waveWeight = p * p * (3 - 2 * p);
-      } else if (t < 1.9) {
-        // Wave back and forth (0.4s -> 1.9s)
-        waveWeight = 1.0;
-        waveCycle = Math.sin((t - 0.4) * 12);
-      } else if (t < 2.4) {
-        // Lower arm smoothly (1.9s -> 2.4s)
-        const p = 1 - (t - 1.9) / 0.5;
-        waveWeight = p * p * (3 - 2 * p);
-      } else {
-        // Finished wave
-        waveWeight = 0;
-        isWavingRef.current = false;
-      }
+    if (leftForeArm) {
+      leftForeArm.rotation.x = 0;
+      leftForeArm.rotation.y = 0.2;
+      leftForeArm.rotation.z = 0.3 + forearmReactZ;
+    }
+    if (leftHand) {
+      leftHand.rotation.set(0, 0, 0);
     }
 
     if (rightArm) {
-      rightArm.rotation.x = THREE.MathUtils.lerp(1.2, 0.15, waveWeight);
-      rightArm.rotation.y = THREE.MathUtils.lerp(0, 0.15, waveWeight);
-      rightArm.rotation.z = THREE.MathUtils.lerp(armSway, -1.05, waveWeight);
+      rightArm.rotation.x = 1.2;
+      rightArm.rotation.y = 0;
+      rightArm.rotation.z = armSway + armReactZ;
     }
     if (rightForeArm) {
-      rightForeArm.rotation.x = THREE.MathUtils.lerp(0, -1.25, waveWeight);
-      rightForeArm.rotation.y = THREE.MathUtils.lerp(-0.2, -0.2, waveWeight);
-      rightForeArm.rotation.z = THREE.MathUtils.lerp(
-        -0.3,
-        -0.4 + waveCycle * 0.12,
-        waveWeight,
-      );
+      rightForeArm.rotation.x = 0;
+      rightForeArm.rotation.y = -0.2;
+      rightForeArm.rotation.z = -0.3 - forearmReactZ;
     }
     if (rightHand) {
-      rightHand.rotation.x = 0;
-      rightHand.rotation.y = 0;
-      rightHand.rotation.z = THREE.MathUtils.lerp(
-        0,
-        waveCycle * 0.35,
-        waveWeight,
-      );
+      rightHand.rotation.set(0, 0, 0);
     }
   });
 
   return (
     <group
       ref={groupRef}
-      onPointerDown={handlePointerDown}
+      onPointerDown={handleAvatarClick}
       onPointerOver={() => {
         gl.domElement.style.cursor = "pointer";
       }}
