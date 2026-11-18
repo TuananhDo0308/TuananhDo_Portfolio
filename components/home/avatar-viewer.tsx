@@ -21,12 +21,10 @@ export function AvatarModel() {
   const isBlinkingRef = useRef(false);
   const nextBlinkTimeRef = useRef(3);
 
-  // Interactive reaction states: "Bụng cười" (Tickle) & "Mặt cọc" (Grumpy)
+  // Interactive reaction state: "Mặt cọc" (Grumpy)
   const isGrumpyRef = useRef(false);
   const grumpyTimerRef = useRef(0);
-  const isTickledRef = useRef(false);
-  const tickleTimerRef = useRef(0);
-  const currentSmileRef = useRef(0.05);
+  const currentSmileRef = useRef(0.02);
 
   // Auto-rotation state
   const autoRotationRef = useRef(0);
@@ -42,33 +40,14 @@ export function AvatarModel() {
   const isPageVisibleRef = useRef(true);
   const lastFrameTimeRef = useRef(0);
 
-  const triggerFaceGrumpy = () => {
+  const triggerGrumpy = () => {
     isGrumpyRef.current = true;
-    grumpyTimerRef.current = 0;
-    isTickledRef.current = false;
-    tickleTimerRef.current = 0;
-  };
-
-  const triggerBellyTickle = () => {
-    isTickledRef.current = true;
-    tickleTimerRef.current = 0;
-    isGrumpyRef.current = false;
     grumpyTimerRef.current = 0;
   };
 
   const handleAvatarClick = (e: any) => {
     if (e.stopPropagation) e.stopPropagation();
-    const objName = e.object?.name || "";
-    const hitY = e.point?.y ?? 0;
-    // Scaled head is from y ~ 0.38 upwards, or mesh name matches Head/Face parts
-    const isFace =
-      /Head|Hair|Glasses|Eye|Teeth/i.test(objName) || hitY >= 0.38;
-
-    if (isFace) {
-      triggerFaceGrumpy();
-    } else {
-      triggerBellyTickle();
-    }
+    triggerGrumpy();
   };
 
   // Detect mobile device
@@ -199,14 +178,8 @@ export function AvatarModel() {
       mousePosRef.current = { x: 0, y: 0 };
     };
 
-    const handleCanvasClick = (event: MouseEvent) => {
-      const rect = gl.domElement.getBoundingClientRect();
-      const centerY = rect.top + rect.height * 0.35;
-      if (event.clientY < centerY) {
-        triggerFaceGrumpy();
-      } else {
-        triggerBellyTickle();
-      }
+    const handleCanvasClick = () => {
+      triggerGrumpy();
     };
 
     gl.domElement.style.cursor = "pointer";
@@ -292,21 +265,18 @@ export function AvatarModel() {
       );
     }
 
-    // === BREATHING & TICKLE GIGGLE ANIMATION ===
+    // === BREATHING & HUFF ANIMATION ===
     let breathScale = 1 + Math.sin(timeRef.current * 0.8) * 0.015;
-    if (isTickledRef.current) {
-      tickleTimerRef.current += cappedDelta;
-      if (tickleTimerRef.current < 2.2) {
-        // Rapid bouncy giggle pulse on chest/belly
-        breathScale += Math.abs(Math.sin(tickleTimerRef.current * 18)) * 0.08;
-      } else {
-        isTickledRef.current = false;
-      }
-    }
 
     if (isGrumpyRef.current) {
       grumpyTimerRef.current += cappedDelta;
-      if (grumpyTimerRef.current >= 2.2) {
+      const t = grumpyTimerRef.current;
+      if (t < 2.4) {
+        // Annoyed chest puff in the first 0.5s
+        if (t < 0.5) {
+          breathScale += Math.sin((t * Math.PI) / 0.5) * 0.035;
+        }
+      } else {
         isGrumpyRef.current = false;
       }
     }
@@ -345,11 +315,8 @@ export function AvatarModel() {
       const blinkAmount = Math.sin(blinkProgress * Math.PI) * 0.9;
       eyeScaleY = 1 - blinkAmount;
     } else if (isGrumpyRef.current) {
-      // Annoyed glaring squint
-      eyeScaleY = 0.45;
-    } else if (isTickledRef.current) {
-      // Laughing squint
-      eyeScaleY = 0.65;
+      // Annoyed glaring squint (lườm cọc)
+      eyeScaleY = 0.38;
     }
 
     const leftEye = bonesMapRef.current.get("LeftEye");
@@ -413,21 +380,11 @@ export function AvatarModel() {
       x: Math.cos(timeRef.current * 0.4) * 0.015,
     };
 
-    // === SMILE & MOUTH BLENDSHAPES ===
-    let targetSmile = 0.05;
-    let targetMouthOpen = 0;
+    // === EXPRESSION & MOUTH MORPH TARGETS ===
+    let targetSmile = 0.0;
 
-    if (isTickledRef.current) {
-      targetSmile = 1.0;
-      targetMouthOpen = 0.15 + Math.sin(tickleTimerRef.current * 18) * 0.08;
-    } else if (isGrumpyRef.current) {
-      targetSmile = 0.0;
-      targetMouthOpen = 0.0;
-    } else if (!isMobile) {
-      const dist = Math.hypot(activeLookPos.x, activeLookPos.y);
-      if (dist < 0.45) {
-        targetSmile = THREE.MathUtils.lerp(0.55, 0.05, dist / 0.45);
-      }
+    if (isGrumpyRef.current) {
+      targetSmile = 0.0; // mặt cọc, mím môi không cười
     }
 
     currentSmileRef.current = THREE.MathUtils.lerp(
@@ -446,7 +403,7 @@ export function AvatarModel() {
         if (typeof openIdx === "number") {
           mesh.morphTargetInfluences[openIdx] = THREE.MathUtils.lerp(
             mesh.morphTargetInfluences[openIdx] || 0,
-            targetMouthOpen,
+            0,
             cappedDelta * 10,
           );
         }
@@ -457,21 +414,16 @@ export function AvatarModel() {
     let extraHeadRotY = 0;
     let extraHeadRotZ = 0;
 
-    if (isTickledRef.current) {
-      const t = tickleTimerRef.current;
-      // Head tilts back slightly laughing with gentle bounce
-      extraHeadRotX = -0.09 + Math.sin(t * 18) * 0.03;
-      extraHeadRotZ = Math.sin(t * 9) * 0.04;
-    } else if (isGrumpyRef.current) {
+    if (isGrumpyRef.current) {
       const t = grumpyTimerRef.current;
-      // Annoyed head shake (lắc đầu quầy quậy phản đối)
+      // Annoyed head shake (lắc đầu quầy quậy phản đối/bực mình)
       const shakeDecay = Math.max(0, 1 - t / 1.6);
-      const headShake = Math.sin(t * 22) * 0.22 * shakeDecay;
-      // Turns head away in a huff (quay mặt đi lườm)
-      const turnAway = Math.min(t / 0.4, 1) * 0.3;
+      const headShake = Math.sin(t * 22) * 0.24 * shakeDecay;
+      // Turns head away in a huff (ngoảnh mặt đi giận dỗi)
+      const turnAway = Math.min(t / 0.45, 1) * 0.35;
       extraHeadRotY = turnAway + headShake;
-      extraHeadRotX = 0.06;
-      extraHeadRotZ = -0.05;
+      extraHeadRotX = 0.07; // hơi chúi xuống lườm
+      extraHeadRotZ = -0.06;
     }
 
     // Head - moves the most (100%)
@@ -602,14 +554,8 @@ export function AvatarModel() {
     const leftHand = bonesMapRef.current.get("LeftHand");
 
     let armReactZ = 0;
-    let forearmReactZ = 0;
-
-    if (isTickledRef.current) {
-      // Gentle laughter bounce on arms
-      armReactZ = Math.sin(tickleTimerRef.current * 18) * 0.03;
-      forearmReactZ = Math.sin(tickleTimerRef.current * 18) * 0.05;
-    } else if (isGrumpyRef.current) {
-      // Tense arms slightly closer to sides
+    if (isGrumpyRef.current) {
+      // Tense arms slightly closer to sides when grumpy
       armReactZ = -0.04;
     }
 
@@ -621,7 +567,7 @@ export function AvatarModel() {
     if (leftForeArm) {
       leftForeArm.rotation.x = 0;
       leftForeArm.rotation.y = 0.2;
-      leftForeArm.rotation.z = 0.3 + forearmReactZ;
+      leftForeArm.rotation.z = 0.3;
     }
     if (leftHand) {
       leftHand.rotation.set(0, 0, 0);
@@ -635,7 +581,7 @@ export function AvatarModel() {
     if (rightForeArm) {
       rightForeArm.rotation.x = 0;
       rightForeArm.rotation.y = -0.2;
-      rightForeArm.rotation.z = -0.3 - forearmReactZ;
+      rightForeArm.rotation.z = -0.3;
     }
     if (rightHand) {
       rightHand.rotation.set(0, 0, 0);
