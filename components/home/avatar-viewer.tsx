@@ -10,6 +10,7 @@ export function AvatarModel() {
   const { scene } = useGLTF("/TuananhDo_Portfolio/avatar.glb");
   const groupRef = useRef<THREE.Group>(null);
   const bonesMapRef = useRef<Map<string, THREE.Bone>>(new Map());
+  const morphMeshesRef = useRef<THREE.Mesh[]>([]);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const { gl } = useThree();
 
@@ -19,6 +20,15 @@ export function AvatarModel() {
   const blinkDurationRef = useRef(0);
   const isBlinkingRef = useRef(false);
   const nextBlinkTimeRef = useRef(3);
+
+  // Waving & interactive gesture states
+  const isWavingRef = useRef(false);
+  const waveTimerRef = useRef(0);
+  const isNoddingRef = useRef(false);
+  const nodTimerRef = useRef(0);
+  const clickCountRef = useRef(0);
+  const lastClickTimeRef = useRef(0);
+  const currentSmileRef = useRef(0);
 
   // Auto-rotation state
   const autoRotationRef = useRef(0);
@@ -33,6 +43,41 @@ export function AvatarModel() {
   // Track if page is visible
   const isPageVisibleRef = useRef(true);
   const lastFrameTimeRef = useRef(0);
+
+  const triggerWave = () => {
+    isWavingRef.current = true;
+    waveTimerRef.current = 0;
+  };
+
+  const triggerNod = () => {
+    isNoddingRef.current = true;
+    nodTimerRef.current = 0;
+  };
+
+  const handlePointerDown = () => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current < 500) {
+      clickCountRef.current += 1;
+    } else {
+      clickCountRef.current = 1;
+    }
+    lastClickTimeRef.current = now;
+
+    if (clickCountRef.current >= 3) {
+      triggerNod();
+      clickCountRef.current = 0;
+    } else {
+      triggerWave();
+    }
+  };
+
+  // Friendly greeting wave on initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerWave();
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Detect mobile device
   useEffect(() => {
@@ -73,13 +118,21 @@ export function AvatarModel() {
       -center.z * scale,
     );
 
-    // Find and store bones
+    // Find and store bones and morph meshes
     bonesMapRef.current.clear();
+    morphMeshesRef.current = [];
     clonedScene.traverse((child) => {
       if (child instanceof THREE.SkinnedMesh) {
         child.skeleton.bones.forEach((bone) => {
           bonesMapRef.current.set(bone.name, bone);
         });
+      }
+      if (
+        (child instanceof THREE.SkinnedMesh || child instanceof THREE.Mesh) &&
+        child.morphTargetDictionary &&
+        child.morphTargetInfluences
+      ) {
+        morphMeshesRef.current.push(child);
       }
     });
 
@@ -154,12 +207,21 @@ export function AvatarModel() {
       mousePosRef.current = { x: 0, y: 0 };
     };
 
+    const handleCanvasClick = () => {
+      handlePointerDown();
+    };
+
+    gl.domElement.style.cursor = "pointer";
+
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
+    gl.domElement.addEventListener("click", handleCanvasClick);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      gl.domElement.removeEventListener("click", handleCanvasClick);
+      gl.domElement.style.cursor = "auto";
     };
   }, [gl, isMobile]);
 
@@ -322,6 +384,52 @@ export function AvatarModel() {
       x: Math.cos(timeRef.current * 0.4) * 0.015,
     };
 
+    // === SMILE BLENDSHAPE ===
+    let targetSmile = 0.05;
+    if (isWavingRef.current) {
+      targetSmile = 0.75;
+    } else if (isNoddingRef.current) {
+      targetSmile = 0.7;
+    } else if (!isMobile) {
+      const dist = Math.hypot(activeLookPos.x, activeLookPos.y);
+      if (dist < 0.45) {
+        targetSmile = THREE.MathUtils.lerp(0.55, 0.05, dist / 0.45);
+      }
+    }
+
+    currentSmileRef.current = THREE.MathUtils.lerp(
+      currentSmileRef.current,
+      targetSmile,
+      cappedDelta * 6,
+    );
+
+    morphMeshesRef.current.forEach((mesh) => {
+      if (mesh.morphTargetDictionary && mesh.morphTargetInfluences) {
+        const smileIdx = mesh.morphTargetDictionary["mouthSmile"];
+        if (typeof smileIdx === "number") {
+          mesh.morphTargetInfluences[smileIdx] = currentSmileRef.current;
+        }
+      }
+    });
+
+    let extraHeadRotX = 0;
+    let extraHeadRotZ = 0;
+
+    if (isWavingRef.current) {
+      const waveHeadTilt =
+        Math.sin(Math.PI * Math.min(waveTimerRef.current / 2.4, 1)) * -0.07;
+      extraHeadRotZ = waveHeadTilt;
+    }
+
+    if (isNoddingRef.current) {
+      nodTimerRef.current += cappedDelta;
+      if (nodTimerRef.current < 1.4) {
+        extraHeadRotX = Math.sin(nodTimerRef.current * 14) * 0.14;
+      } else {
+        isNoddingRef.current = false;
+      }
+    }
+
     // Head - moves the most (100%)
     if (headBone) {
       headBone.rotation.y = THREE.MathUtils.lerp(
@@ -336,10 +444,15 @@ export function AvatarModel() {
       headBone.rotation.x = THREE.MathUtils.lerp(
         headBone.rotation.x,
         THREE.MathUtils.clamp(
-          targetRotationX + idleHeadMovement.x,
-          -0.22,
-          0.22,
+          targetRotationX + idleHeadMovement.x + extraHeadRotX,
+          -0.25,
+          0.25,
         ),
+        cappedDelta * 5,
+      );
+      headBone.rotation.z = THREE.MathUtils.lerp(
+        headBone.rotation.z,
+        extraHeadRotZ,
         cappedDelta * 5,
       );
     }
@@ -425,22 +538,84 @@ export function AvatarModel() {
       );
     }
 
-    // === SUBTLE ARM MOVEMENT ===
+    // === ARM MOVEMENTS (IDLE SWAY & INTERACTIVE WAVE) ===
     const armSwaySpeed = 0.6;
     const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.03;
 
     const rightArm = bonesMapRef.current.get("RightArm");
+    const rightForeArm = bonesMapRef.current.get("RightForeArm");
+    const rightHand = bonesMapRef.current.get("RightHand");
     const leftArm = bonesMapRef.current.get("LeftArm");
 
-    if (rightArm) {
-      rightArm.rotation.z = armSway;
-    }
     if (leftArm) {
+      leftArm.rotation.x = 1.2;
+      leftArm.rotation.y = 0;
       leftArm.rotation.z = -armSway;
+    }
+
+    let waveWeight = 0;
+    let waveCycle = 0;
+
+    if (isWavingRef.current) {
+      waveTimerRef.current += cappedDelta;
+      const t = waveTimerRef.current;
+
+      if (t < 0.4) {
+        // Raise arm smoothly (0s -> 0.4s)
+        const p = t / 0.4;
+        waveWeight = p * p * (3 - 2 * p);
+      } else if (t < 1.9) {
+        // Wave back and forth (0.4s -> 1.9s)
+        waveWeight = 1.0;
+        waveCycle = Math.sin((t - 0.4) * 12);
+      } else if (t < 2.4) {
+        // Lower arm smoothly (1.9s -> 2.4s)
+        const p = 1 - (t - 1.9) / 0.5;
+        waveWeight = p * p * (3 - 2 * p);
+      } else {
+        // Finished wave
+        waveWeight = 0;
+        isWavingRef.current = false;
+      }
+    }
+
+    if (rightArm) {
+      rightArm.rotation.x = THREE.MathUtils.lerp(1.2, 0.15, waveWeight);
+      rightArm.rotation.y = THREE.MathUtils.lerp(0, 0.15, waveWeight);
+      rightArm.rotation.z = THREE.MathUtils.lerp(armSway, -1.05, waveWeight);
+    }
+    if (rightForeArm) {
+      rightForeArm.rotation.x = THREE.MathUtils.lerp(0, -1.25, waveWeight);
+      rightForeArm.rotation.y = THREE.MathUtils.lerp(-0.2, -0.2, waveWeight);
+      rightForeArm.rotation.z = THREE.MathUtils.lerp(
+        -0.3,
+        -0.4 + waveCycle * 0.12,
+        waveWeight,
+      );
+    }
+    if (rightHand) {
+      rightHand.rotation.x = 0;
+      rightHand.rotation.y = 0;
+      rightHand.rotation.z = THREE.MathUtils.lerp(
+        0,
+        waveCycle * 0.35,
+        waveWeight,
+      );
     }
   });
 
-  return <group ref={groupRef} />;
+  return (
+    <group
+      ref={groupRef}
+      onPointerDown={handlePointerDown}
+      onPointerOver={() => {
+        gl.domElement.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        gl.domElement.style.cursor = "auto";
+      }}
+    />
+  );
 }
 
 useGLTF.preload("/TuananhDo_Portfolio/avatar.glb");
