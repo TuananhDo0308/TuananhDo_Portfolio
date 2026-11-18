@@ -14,6 +14,7 @@ export default function Works({
   columns?: number;
   isHome?: boolean;
 }) {
+  const { animateCursor } = useCursorContext();
   // Limit to 6 projects if isHome is true
   const displayedProjects = isHome ? projects.slice(0, 6) : projects;
 
@@ -25,7 +26,9 @@ export default function Works({
       {/* Section Header */}
       <div className="mx-auto w-full flex justify-between items-start mb-8 md:mb-16">
         <motion.h1
-          className="text-4xl md:text-8xl font-bold"
+          className="text-4xl md:text-8xl font-bold select-none"
+          onMouseEnter={() => animateCursor("textHover")}
+          onMouseLeave={() => animateCursor("cursorEnter")}
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
@@ -53,7 +56,12 @@ export default function Works({
         }`}
       >
         {displayedProjects.map((work, index) => (
-          <Link href={`/projects/${work.slug}`} key={work.id}>
+          <Link
+            href={`/projects/${work.slug}`}
+            key={work.id}
+            onMouseEnter={() => animateCursor("projectHover", "VIEW ↗")}
+            onMouseLeave={() => animateCursor("cursorEnter")}
+          >
             <motion.div
               className="group"
               initial={{ opacity: 0, y: 30 }}
@@ -115,6 +123,14 @@ export default function Works({
                   {work.tags.slice(0, 4).map((tag) => (
                     <span
                       key={tag}
+                      onMouseEnter={(e) => {
+                        e.stopPropagation();
+                        animateCursor("tagHover");
+                      }}
+                      onMouseLeave={(e) => {
+                        e.stopPropagation();
+                        animateCursor("projectHover", "VIEW ↗");
+                      }}
                       className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-neutral-400 border border-white/10 bg-white/[0.03] group-hover:border-white/20 transition-colors duration-300"
                     >
                       {tag}
@@ -157,6 +173,8 @@ export default function Works({
         >
           <Link href="/projects">
             <motion.button
+              onMouseEnter={() => animateCursor("buttonHover")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
               className="group relative px-8 py-4 bg-white text-black font-semibold overflow-hidden border border-white uppercase tracking-wider text-xs"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}

@@ -5,8 +5,10 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { SkeletonUtils } from "three-stdlib";
+import { useCursorContext } from "@/components/CursorContext";
 
 export function AvatarModel() {
+  const { animateCursor } = useCursorContext();
   const { scene } = useGLTF("/TuananhDo_Portfolio/avatar.glb");
   const groupRef = useRef<THREE.Group>(null);
   const bonesMapRef = useRef<Map<string, THREE.Bone>>(new Map());
@@ -581,10 +583,10 @@ export function AvatarModel() {
       ref={groupRef}
       onPointerDown={handleAvatarClick}
       onPointerOver={() => {
-        gl.domElement.style.cursor = "pointer";
+        animateCursor("avatarHover", "POKE");
       }}
       onPointerOut={() => {
-        gl.domElement.style.cursor = "auto";
+        animateCursor("cursorEnter");
       }}
     />
   );

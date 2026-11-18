@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useCursorContext } from "../CursorContext";
 
 export default function Footer() {
+  const { animateCursor } = useCursorContext();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -57,12 +59,18 @@ export default function Footer() {
           <div className="flex flex-wrap items-center gap-3">
             <a
               href="mailto:TuananhDo0308@gmail.com"
+              onMouseEnter={() => animateCursor("copyHover", "MAIL ✉")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
               className="text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors"
             >
               TuananhDo0308@gmail.com
             </a>
             <button
               onClick={handleCopy}
+              onMouseEnter={() =>
+                animateCursor("copyHover", copied ? "COPIED" : "COPY")
+              }
+              onMouseLeave={() => animateCursor("cursorEnter")}
               type="button"
               className="px-2.5 py-1 text-xs font-mono uppercase tracking-wider border border-white/20 hover:border-white text-neutral-300 hover:text-white transition-all bg-white/[0.04]"
               title="Copy email to clipboard"
@@ -85,6 +93,8 @@ export default function Footer() {
               href={social.url}
               target="_blank"
               rel="noopener noreferrer"
+              onMouseEnter={() => animateCursor("buttonHover")}
+              onMouseLeave={() => animateCursor("cursorEnter")}
               className="block text-xl md:text-2xl font-semibold hover:text-white/70 transition-colors"
             >
               {social.name}
@@ -104,7 +114,11 @@ export default function Footer() {
         className="space-y-12"
       >
 <div className="relative w-full overflow-hidden py-12">
-  <h2 className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[8vw] md:text-[10vw]">
+  <h2
+    onMouseEnter={() => animateCursor("textHover")}
+    onMouseLeave={() => animateCursor("cursorEnter")}
+    className="relative left-1/2 -translate-x-1/2 whitespace-nowrap font-bold leading-[0.85] tracking-[-0.03em] text-[8vw] md:text-[10vw] select-none"
+  >
     @tuananhdo
   </h2>
 </div>

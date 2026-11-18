@@ -24,28 +24,12 @@ export default function HeroSection() {
       id="hero"
       className="relative w-full max-w-[100vw] h-screen overflow-hidden bg-black"
     >
-      {/* Ambient background glow & subtle tech grid */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.05) 35%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
-      </div>
-
       {/* 3D Canvas - Avatar in Center with hover effect */}
-      <div className="absolute inset-0 z-10 flex max-w-full items-center justify-center overflow-hidden">
+      <div
+        className="absolute inset-0 z-10 flex max-w-full items-center justify-center overflow-hidden"
+        onMouseEnter={() => animateCursor("avatarHover", "POKE")}
+        onMouseLeave={() => animateCursor("cursorEnter")}
+      >
         <div className="relative h-full w-full max-w-md overflow-hidden md:max-w-2xl">
           <div className="absolute inset-0 z-10 overflow-hidden">
             {/* NAME TAG */}
@@ -57,11 +41,7 @@ export default function HeroSection() {
             >
               <div className="relative flex flex-col items-center">
                 {/* Tag box - frosted glassmorphism */}
-                <div className="relative px-4 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-md border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
+                <div className="relative px-4 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-md border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex items-center">
                   <TypewriterEffect
                     words={[
                       { text: "Fullstack Developer" },
@@ -91,23 +71,23 @@ export default function HeroSection() {
                 gl={{ antialias: true }}
               >
                 <color attach="background" args={["#000000"]} />
-                <ambientLight intensity={0.65} />
+                <ambientLight intensity={0.7} />
                 <directionalLight position={[6, 8, 5]} intensity={1.4} />
                 <pointLight
                   color={"#ffd1b3"}
                   position={[-5, 4, 3]}
                   intensity={0.5}
                 />
-                {/* Rim lights for avatar edge separation */}
+                {/* Clean neutral rim lights for avatar edge separation */}
                 <directionalLight
                   position={[-4, 5, -5]}
-                  intensity={1.8}
-                  color="#60a5fa"
+                  intensity={1.2}
+                  color="#ffffff"
                 />
                 <pointLight
                   position={[4, 2, -4]}
-                  intensity={1.2}
-                  color="#818cf8"
+                  intensity={0.8}
+                  color="#ffffff"
                 />
 
                 <Center>
@@ -130,7 +110,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Left Side Text - Frontend Developer with enhanced effects */}
+      {/* Left Side Text - Name */}
       <motion.div
         className="absolute left-4 md:left-8 bottom-8 group z-20"
         initial={{ opacity: 0, x: -100 }}
@@ -138,29 +118,21 @@ export default function HeroSection() {
         transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
       >
         <motion.h2
-          onMouseEnter={mouseEnterHandler}
-          onMouseLeave={mouseLeaveHandler}
-          className="text-white text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight relative"
+          onMouseEnter={() => animateCursor("textHover")}
+          onMouseLeave={() => animateCursor("cursorEnter")}
+          className="text-white text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight relative select-none"
           whileHover={{
-            textShadow: "0 0 20px rgba(59, 130, 246, 0.8)",
+            textShadow: "0 0 20px rgba(255, 255, 255, 0.4)",
           }}
         >
           Tuấn Anh
           <motion.span
-            className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-blue-500 to-transparent"
+            className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-white/60 to-transparent"
             initial={{ width: 0 }}
             whileHover={{ width: "100%" }}
             transition={{ duration: 0.3 }}
           />
         </motion.h2>
-        <motion.p
-          className="text-neutral-400 text-sm sm:text-base md:text-lg font-normal mt-3 max-w-sm tracking-wide"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          Software Engineer & Creative Developer based in Vietnam
-        </motion.p>
       </motion.div>
 
       {/* Bottom Right - Scroll Indicator with pulse effect */}
