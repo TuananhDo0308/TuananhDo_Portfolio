@@ -1,6 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
-import { Suspense, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { Suspense, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, Center, ContactShadows } from "@react-three/drei";
 import { AvatarModel } from "./avatar-viewer";
@@ -11,6 +11,8 @@ import { TypewriterEffect } from "../ui/typewriter-effect";
 export default function HeroSection() {
   const { animateCursor } = useCursorContext();
   const lenis = useLenis();
+  const heroRef = useRef<HTMLElement>(null);
+  const isInView = useInView(heroRef, { margin: "200px" });
 
   const mouseEnterHandler = () => {
     animateCursor("buttonHover");
@@ -21,6 +23,7 @@ export default function HeroSection() {
 
   return (
     <section
+      ref={heroRef}
       id="hero"
       className="relative w-full max-w-[100vw] h-screen overflow-hidden bg-black"
     >
@@ -68,7 +71,9 @@ export default function HeroSection() {
                   position: [0, 1, 4],
                   fov: 40,
                 }}
-                gl={{ antialias: true }}
+                gl={{ antialias: true, powerPreference: "high-performance" }}
+                dpr={[1, 1.5]}
+                frameloop={isInView ? "always" : "never"}
               >
                 <color attach="background" args={["#000000"]} />
                 <ambientLight intensity={0.7} />

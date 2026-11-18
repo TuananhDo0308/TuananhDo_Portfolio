@@ -7,7 +7,7 @@ import {
   AnimatePresence,
   type Variants,
 } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCursorContext } from "../components/CursorContext";
 
 function Cursor() {
@@ -23,6 +23,15 @@ function Cursor() {
 
   const [isClicking, setIsClicking] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  const variantRef = useRef(animateCursorVariant);
+  variantRef.current = animateCursorVariant;
+
+  const isVisibleRef = useRef(isVisible);
+  isVisibleRef.current = isVisible;
+
+  const animateCursorRef = useRef(animateCursor);
+  animateCursorRef.current = animateCursor;
 
   const variants: Variants = {
     cursorEnter: {
@@ -131,19 +140,19 @@ function Cursor() {
     const mouseMoveHandler = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) setIsVisible(true);
     };
 
     const mouseEnterHandler = () => {
       setIsVisible(true);
-      if (animateCursorVariant === "cursorLeave") {
-        animateCursor("cursorEnter");
+      if (variantRef.current === "cursorLeave") {
+        animateCursorRef.current("cursorEnter");
       }
     };
 
     const mouseLeaveHandler = () => {
       setIsVisible(false);
-      animateCursor("cursorLeave");
+      animateCursorRef.current("cursorLeave");
     };
 
     const mouseDownHandler = () => {
@@ -154,7 +163,7 @@ function Cursor() {
       setIsClicking(false);
     };
 
-    window.addEventListener("mousemove", mouseMoveHandler);
+    window.addEventListener("mousemove", mouseMoveHandler, { passive: true });
     document.addEventListener("mouseenter", mouseEnterHandler);
     document.addEventListener("mouseleave", mouseLeaveHandler);
     window.addEventListener("mousedown", mouseDownHandler);
@@ -167,7 +176,7 @@ function Cursor() {
       window.removeEventListener("mousedown", mouseDownHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
-  }, [animateCursor, animateCursorVariant, isVisible, mouseX, mouseY]);
+  }, [mouseX, mouseY]);
 
   return (
     <>

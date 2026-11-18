@@ -148,8 +148,26 @@ export function AvatarModel() {
   useEffect(() => {
     if (isMobile) return;
 
+    let cachedRect = gl.domElement.getBoundingClientRect();
+    let lastRectTime = performance.now();
+
+    const updateRect = () => {
+      cachedRect = gl.domElement.getBoundingClientRect();
+      lastRectTime = performance.now();
+    };
+
+    window.addEventListener("resize", updateRect, { passive: true });
+    window.addEventListener("scroll", updateRect, { passive: true });
+
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = gl.domElement.getBoundingClientRect();
+      const now = performance.now();
+      // Throttle getBoundingClientRect to avoid layout thrashing during mouse movements
+      if (now - lastRectTime > 400) {
+        cachedRect = gl.domElement.getBoundingClientRect();
+        lastRectTime = now;
+      }
+      const rect = cachedRect;
+
       // If hero canvas is scrolled completely out of view, reset to center
       if (rect.bottom < 0 || rect.top > window.innerHeight) {
         mousePosRef.current = { x: 0, y: 0 };
@@ -186,11 +204,13 @@ export function AvatarModel() {
 
     gl.domElement.style.cursor = "pointer";
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave);
     gl.domElement.addEventListener("click", handleCanvasClick);
 
     return () => {
+      window.removeEventListener("resize", updateRect);
+      window.removeEventListener("scroll", updateRect);
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
       gl.domElement.removeEventListener("click", handleCanvasClick);
