@@ -25,7 +25,7 @@ export default function HeroSection() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative w-full max-w-[100vw] h-screen overflow-hidden bg-black"
+      className="relative w-full max-w-[100vw] h-screen h-[100dvh] overflow-hidden bg-black"
     >
       {/* 3D Canvas - Avatar in Center with hover effect */}
       <div

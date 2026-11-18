@@ -52,7 +52,7 @@ export default function Works({
       {/* Works Grid */}
       <div
         className={`mx-auto w-full grid grid-cols-1 gap-8 ${
-          columns === 2 ? "md:grid-cols-2" : "md:grid-cols-3"
+          columns === 2 ? "md:grid-cols-2" : "md:grid-cols-2 lg:grid-cols-3"
         }`}
       >
         {displayedProjects.map((work, index) => (

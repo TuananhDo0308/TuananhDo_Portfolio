@@ -13,6 +13,25 @@ import { useCursorContext } from "../components/CursorContext";
 function Cursor() {
   const { animateCursorVariant, cursorText, animateCursor } = useCursorContext();
 
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
+
+  useEffect(() => {
+    const checkTouch = () => {
+      const hasTouch =
+        (typeof window !== "undefined" &&
+          (window.matchMedia("(pointer: coarse)").matches ||
+            window.matchMedia("(hover: none)").matches ||
+            window.innerWidth <= 1024 ||
+            "ontouchstart" in window ||
+            (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)));
+      setIsTouchDevice(Boolean(hasTouch));
+    };
+
+    checkTouch();
+    window.addEventListener("resize", checkTouch);
+    return () => window.removeEventListener("resize", checkTouch);
+  }, []);
+
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
@@ -137,6 +156,8 @@ function Cursor() {
   };
 
   useEffect(() => {
+    if (isTouchDevice) return;
+
     const mouseMoveHandler = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -176,7 +197,11 @@ function Cursor() {
       window.removeEventListener("mousedown", mouseDownHandler);
       window.removeEventListener("mouseup", mouseUpHandler);
     };
-  }, [mouseX, mouseY]);
+  }, [isTouchDevice, mouseX, mouseY]);
+
+  if (isTouchDevice) {
+    return null;
+  }
 
   return (
     <>
@@ -229,7 +254,7 @@ function Cursor() {
           translateX: "-50%",
           translateY: "-50%",
         }}
-        className="fixed top-0 left-0 pointer-events-none z-[10000]"
+        className="cursor-dot fixed top-0 left-0 pointer-events-none z-[10000]"
         animate={{
           scale:
             !isVisible ||

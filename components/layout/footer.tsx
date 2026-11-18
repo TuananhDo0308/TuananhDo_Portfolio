@@ -45,7 +45,7 @@ export default function Footer() {
 
   return (
    
-    <footer id="footer" className="bg-black text-white pt-24 pb-8 px-8 border-t border-white/10">
+    <footer id="footer" className="bg-black text-white pt-24 pb-8 px-4 md:px-8 border-t border-white/10">
       {/* Top Section */}
       <motion.div
         className=" mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 mb-24"
@@ -61,7 +61,7 @@ export default function Footer() {
               href="mailto:TuananhDo0308@gmail.com"
               onMouseEnter={() => animateCursor("copyHover", "MAIL ✉")}
               onMouseLeave={() => animateCursor("cursorEnter")}
-              className="text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors"
+              className="text-xl sm:text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors break-all sm:break-normal"
             >
               TuananhDo0308@gmail.com
             </a>

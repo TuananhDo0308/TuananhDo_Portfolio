@@ -52,10 +52,16 @@ export function AvatarModel() {
     triggerGrumpy();
   };
 
-  // Detect mobile device
+  // Detect mobile device or touch-based tablet
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const isTouchOrTablet =
+        window.innerWidth <= 1024 ||
+        (window.matchMedia &&
+          (window.matchMedia("(pointer: coarse)").matches ||
+            window.matchMedia("(hover: none)").matches)) ||
+        "ontouchstart" in window;
+      setIsMobile(Boolean(isTouchOrTablet));
     };
 
     checkMobile();
