@@ -2,8 +2,18 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export default function Footer() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText("TuananhDo0308@gmail.com");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
   const socialLinks = [
     { name: "LinkedIn", url: "https://www.linkedin.com/in/do-tran-tuan-anh-68b2a2317/" },    
     { name: "GitHub", url: "https://github.com/TuananhDo0308" },
@@ -44,12 +54,22 @@ export default function Footer() {
       >
         {/* Left - Contact Info */}
         <motion.div variants={itemVariants} className="space-y-4">
-          <a
-            href="mailto:hello@example.com"
-            className="text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors block"
-          >
-            TuananhDo0308@gmail.com
-          </a>
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href="mailto:TuananhDo0308@gmail.com"
+              className="text-2xl md:text-3xl font-bold hover:text-white/70 transition-colors"
+            >
+              TuananhDo0308@gmail.com
+            </a>
+            <button
+              onClick={handleCopy}
+              type="button"
+              className="px-2.5 py-1 text-xs font-mono uppercase tracking-wider border border-white/20 hover:border-white text-neutral-300 hover:text-white transition-all bg-white/[0.04]"
+              title="Copy email to clipboard"
+            >
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
+          </div>
           <p className="text-white/50 text-base md:text-lg">
             Permanently located in
             <br />

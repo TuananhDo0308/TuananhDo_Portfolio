@@ -8,10 +8,12 @@ export const TypewriterEffect = ({
   words,
   className,
   cursorClassName,
+  textClassName,
 }: {
   words: { text: string; className?: string }[];
   className?: string;
   cursorClassName?: string;
+  textClassName?: string;
 }) => {
   const [wordIndex, setWordIndex] = useState(0);
   const [displayed, setDisplayed] = useState<string[]>([]);
@@ -57,7 +59,7 @@ setDisplayed(
             animate={{ opacity: 1}}
             transition={{ duration: 0.15 }}
             className={cn(
-              "text-black font-bold",
+              textClassName || "text-neutral-100 font-semibold",
               words[wordIndex].className
             )}
           >

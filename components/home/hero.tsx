@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment, Center } from "@react-three/drei";
+import { Environment, Center, ContactShadows } from "@react-three/drei";
 import { AvatarModel } from "./avatar-viewer";
 import { useCursorContext } from "@/components/CursorContext";
 import { useLenis } from "lenis/react";
@@ -24,6 +24,26 @@ export default function HeroSection() {
       id="hero"
       className="relative w-full max-w-[100vw] h-screen overflow-hidden bg-black"
     >
+      {/* Ambient background glow & subtle tech grid */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[900px] md:h-[900px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.05) 35%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
+      </div>
+
       {/* 3D Canvas - Avatar in Center with hover effect */}
       <div className="absolute inset-0 z-10 flex max-w-full items-center justify-center overflow-hidden">
         <div className="relative h-full w-full max-w-md overflow-hidden md:max-w-2xl">
@@ -36,11 +56,12 @@ export default function HeroSection() {
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             >
               <div className="relative flex flex-col items-center">
-                {/* Tag box */}
-                <div className="relative px-5 py-1.5 rounded-md bg-white backdrop-blur-sm">
-                  {/* Glow */}
-
-                  {/* Text */}
+                {/* Tag box - frosted glassmorphism */}
+                <div className="relative px-4 py-1.5 rounded-full bg-neutral-900/80 backdrop-blur-md border border-white/15 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
                   <TypewriterEffect
                     words={[
                       { text: "Fullstack Developer" },
@@ -51,7 +72,7 @@ export default function HeroSection() {
                 </div>
 
                 {/* Triangle pointer */}
-                <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[10px] border-l-transparent border-r-transparent border-t-white"></div>
+                <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[8px] border-l-transparent border-r-transparent border-t-neutral-900/80"></div>
               </div>
             </motion.div>
 
@@ -67,22 +88,40 @@ export default function HeroSection() {
                   position: [0, 1, 4],
                   fov: 40,
                 }}
-                // className='pt-20'
                 gl={{ antialias: true }}
               >
                 <color attach="background" args={["#000000"]} />
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 10, 5]} intensity={1.2} />
+                <ambientLight intensity={0.65} />
+                <directionalLight position={[6, 8, 5]} intensity={1.4} />
                 <pointLight
-                  color={"#ffffff"}
-                  position={[-5, 5, -5]}
-                  intensity={0.6}
+                  color={"#ffd1b3"}
+                  position={[-5, 4, 3]}
+                  intensity={0.5}
                 />
-                <pointLight position={[5, 2, 5]} intensity={0.4} />
+                {/* Rim lights for avatar edge separation */}
+                <directionalLight
+                  position={[-4, 5, -5]}
+                  intensity={1.8}
+                  color="#60a5fa"
+                />
+                <pointLight
+                  position={[4, 2, -4]}
+                  intensity={1.2}
+                  color="#818cf8"
+                />
 
                 <Center>
                   <AvatarModel />
                 </Center>
+
+                <ContactShadows
+                  position={[0, -0.95, 0]}
+                  opacity={0.55}
+                  scale={3.5}
+                  blur={2}
+                  far={2.5}
+                  color="#000000"
+                />
 
                 <Environment preset="sunset" />
               </Canvas>
@@ -114,6 +153,14 @@ export default function HeroSection() {
             transition={{ duration: 0.3 }}
           />
         </motion.h2>
+        <motion.p
+          className="text-neutral-400 text-sm sm:text-base md:text-lg font-normal mt-3 max-w-sm tracking-wide"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          Software Engineer & Creative Developer based in Vietnam
+        </motion.p>
       </motion.div>
 
       {/* Bottom Right - Scroll Indicator with pulse effect */}
