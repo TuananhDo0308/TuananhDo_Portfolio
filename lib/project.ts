@@ -26,6 +26,47 @@ export interface ProjectDetail {
 
 export const projects: ProjectDetail[] = [
   {
+    id: 12,
+    slug: "scylla",
+    type: "PRODUCTION",
+    title: "Scylla",
+    description: "AI-Powered Team Calendar & Room Scheduling with MCP",
+    link: {
+      type: "Product",
+      url: "https://scylla-nu.vercel.app/",
+    },
+    image: "/TuananhDo_Portfolio/images/Scylla.png",
+    category: "Full-Stack Development & AI",
+    year: "2025",
+    client: "Open Source Project",
+    role: "Full-Stack Developer",
+    challenge:
+      "Coordinating work across distributed teams often leads to calendar fragmentation, scheduling conflicts, and friction finding conference rooms with appropriate equipment. Furthermore, tasks on Kanban boards remain detached from calendar meetings, and modern AI developer agents (such as Claude Desktop and Cursor) lack native capability to check availability, book rooms, or advance task progress autonomously.",
+    solution:
+      "Engineered Scylla, a unified team calendar, meeting room scheduling, and Kanban task tracking platform with built-in Model Context Protocol (MCP) server support. Built with Next.js 16 (App Router, React 19) and Bun, styled using Tailwind CSS v4, and backed by PostgreSQL 16 with Drizzle ORM. Implemented Google Calendar two-way synchronization, Google Workspace room directory integration, Better Auth authentication, and custom MCP tools enabling AI agents to schedule meetings and manage tasks directly from developer editors.",
+    result:
+      "Successfully launched the platform at scylla-nu.vercel.app with open-source codebase on GitHub. Provided seamless multi-person timeline scheduling, intelligent room reservation with equipment filters, and native AI agent interoperability through MCP, allowing developers to manage meetings and deliverables entirely from their coding workflows.",
+    images: [
+      "/TuananhDo_Portfolio/images/Scylla.png",
+      "/TuananhDo_Portfolio/images/scylla-calendar.png",
+      "/TuananhDo_Portfolio/images/scylla-workspaces.png",
+      "/TuananhDo_Portfolio/images/scylla-kanban.png",
+    ],
+    tags: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS v4",
+      "Model Context Protocol (MCP)",
+      "PostgreSQL",
+      "Drizzle ORM",
+      "Better Auth",
+      "Bun",
+    ],
+    liveUrl: "https://scylla-nu.vercel.app/",
+    githubUrl: "https://github.com/belastrittmatter/Scylla",
+  },
+  {
     id: 1,
     slug: "event-management-app-bosch-global",
     type: "INTERNSHIP",
