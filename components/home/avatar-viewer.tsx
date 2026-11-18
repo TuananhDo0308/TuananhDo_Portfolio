@@ -10,6 +10,7 @@ export function AvatarModel() {
   const { scene } = useGLTF("/TuananhDo_Portfolio/avatar.glb");
   const groupRef = useRef<THREE.Group>(null);
   const bonesMapRef = useRef<Map<string, THREE.Bone>>(new Map());
+  const morphMeshesRef = useRef<THREE.Mesh[]>([]);
   const mousePosRef = useRef({ x: 0, y: 0 });
   const { gl } = useThree();
 
@@ -19,6 +20,11 @@ export function AvatarModel() {
   const blinkDurationRef = useRef(0);
   const isBlinkingRef = useRef(false);
   const nextBlinkTimeRef = useRef(3);
+
+  // Interactive reaction state: "Mặt cọc" (Grumpy)
+  const isGrumpyRef = useRef(false);
+  const grumpyTimerRef = useRef(0);
+  const currentSmileRef = useRef(0.02);
 
   // Auto-rotation state
   const autoRotationRef = useRef(0);
@@ -33,6 +39,16 @@ export function AvatarModel() {
   // Track if page is visible
   const isPageVisibleRef = useRef(true);
   const lastFrameTimeRef = useRef(0);
+
+  const triggerGrumpy = () => {
+    isGrumpyRef.current = true;
+    grumpyTimerRef.current = 0;
+  };
+
+  const handleAvatarClick = (e: any) => {
+    if (e.stopPropagation) e.stopPropagation();
+    triggerGrumpy();
+  };
 
   // Detect mobile device
   useEffect(() => {
@@ -73,13 +89,21 @@ export function AvatarModel() {
       -center.z * scale,
     );
 
-    // Find and store bones
+    // Find and store bones and morph meshes
     bonesMapRef.current.clear();
+    morphMeshesRef.current = [];
     clonedScene.traverse((child) => {
       if (child instanceof THREE.SkinnedMesh) {
         child.skeleton.bones.forEach((bone) => {
           bonesMapRef.current.set(bone.name, bone);
         });
+      }
+      if (
+        (child instanceof THREE.SkinnedMesh || child instanceof THREE.Mesh) &&
+        child.morphTargetDictionary &&
+        child.morphTargetInfluences
+      ) {
+        morphMeshesRef.current.push(child);
       }
     });
 
@@ -154,12 +178,21 @@ export function AvatarModel() {
       mousePosRef.current = { x: 0, y: 0 };
     };
 
+    const handleCanvasClick = () => {
+      triggerGrumpy();
+    };
+
+    gl.domElement.style.cursor = "pointer";
+
     window.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseleave", handleMouseLeave);
+    gl.domElement.addEventListener("click", handleCanvasClick);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      gl.domElement.removeEventListener("click", handleCanvasClick);
+      gl.domElement.style.cursor = "auto";
     };
   }, [gl, isMobile]);
 
@@ -233,9 +266,14 @@ export function AvatarModel() {
     }
 
     // === BREATHING ANIMATION ===
-    const breathingSpeed = 0.8;
-    const breathingAmount = 0.015;
-    const breathCycle = Math.sin(timeRef.current * breathingSpeed);
+    const breathScale = 1 + Math.sin(timeRef.current * 0.8) * 0.015;
+
+    if (isGrumpyRef.current) {
+      grumpyTimerRef.current += cappedDelta;
+      if (grumpyTimerRef.current >= 2.4) {
+        isGrumpyRef.current = false;
+      }
+    }
 
     const chest =
       bonesMapRef.current.get("Spine1") ||
@@ -243,12 +281,13 @@ export function AvatarModel() {
       bonesMapRef.current.get("UpperChest");
 
     if (chest) {
-      chest.scale.setScalar(1 + breathCycle * breathingAmount);
+      chest.scale.setScalar(breathScale);
     }
 
-    // === BLINKING ANIMATION ===
+    // === BLINKING & EYE EXPRESSION ANIMATION ===
     if (
       !isBlinkingRef.current &&
+      !isGrumpyRef.current &&
       blinkTimerRef.current >= nextBlinkTimeRef.current
     ) {
       isBlinkingRef.current = true;
@@ -257,6 +296,7 @@ export function AvatarModel() {
       nextBlinkTimeRef.current = Math.random() * 3 + 2;
     }
 
+    let eyeScaleY = 1.0;
     if (isBlinkingRef.current) {
       blinkDurationRef.current += cappedDelta;
       const blinkLength = 0.15;
@@ -267,16 +307,28 @@ export function AvatarModel() {
       }
 
       const blinkAmount = Math.sin(blinkProgress * Math.PI) * 0.9;
+      eyeScaleY = 1 - blinkAmount;
+    } else if (isGrumpyRef.current) {
+      // Annoyed glaring squint (lườm cọc)
+      eyeScaleY = 0.38;
+    }
 
-      const leftEye = bonesMapRef.current.get("LeftEye");
-      const rightEye = bonesMapRef.current.get("RightEye");
+    const leftEye = bonesMapRef.current.get("LeftEye");
+    const rightEye = bonesMapRef.current.get("RightEye");
 
-      if (leftEye) {
-        leftEye.scale.y = 1 - blinkAmount;
-      }
-      if (rightEye) {
-        rightEye.scale.y = 1 - blinkAmount;
-      }
+    if (leftEye) {
+      leftEye.scale.y = THREE.MathUtils.lerp(
+        leftEye.scale.y,
+        eyeScaleY,
+        cappedDelta * 12,
+      );
+    }
+    if (rightEye) {
+      rightEye.scale.y = THREE.MathUtils.lerp(
+        rightEye.scale.y,
+        eyeScaleY,
+        cappedDelta * 12,
+      );
     }
 
     // === SUBTLE IDLE SWAY (CHỈ DESKTOP) ===
@@ -322,25 +374,76 @@ export function AvatarModel() {
       x: Math.cos(timeRef.current * 0.4) * 0.015,
     };
 
+    // === EXPRESSION & MOUTH MORPH TARGETS ===
+    let targetSmile = 0.0;
+
+    if (isGrumpyRef.current) {
+      targetSmile = 0.0; // mặt cọc, mím môi không cười
+    }
+
+    currentSmileRef.current = THREE.MathUtils.lerp(
+      currentSmileRef.current,
+      targetSmile,
+      cappedDelta * 8,
+    );
+
+    morphMeshesRef.current.forEach((mesh) => {
+      if (mesh.morphTargetDictionary && mesh.morphTargetInfluences) {
+        const smileIdx = mesh.morphTargetDictionary["mouthSmile"];
+        if (typeof smileIdx === "number") {
+          mesh.morphTargetInfluences[smileIdx] = currentSmileRef.current;
+        }
+        const openIdx = mesh.morphTargetDictionary["mouthOpen"];
+        if (typeof openIdx === "number") {
+          mesh.morphTargetInfluences[openIdx] = THREE.MathUtils.lerp(
+            mesh.morphTargetInfluences[openIdx] || 0,
+            0,
+            cappedDelta * 10,
+          );
+        }
+      }
+    });
+
+    let extraHeadRotX = 0;
+    let extraHeadRotY = 0;
+    let extraHeadRotZ = 0;
+
+    if (isGrumpyRef.current) {
+      const t = grumpyTimerRef.current;
+      // Annoyed head shake (lắc đầu quầy quậy phản đối/bực mình)
+      const shakeDecay = Math.max(0, 1 - t / 1.6);
+      const headShake = Math.sin(t * 22) * 0.24 * shakeDecay;
+      // Turns head away in a huff (ngoảnh mặt đi giận dỗi)
+      const turnAway = Math.min(t / 0.45, 1) * 0.35;
+      extraHeadRotY = turnAway + headShake;
+      extraHeadRotX = 0.07; // hơi chúi xuống lườm
+      extraHeadRotZ = -0.06;
+    }
+
     // Head - moves the most (100%)
     if (headBone) {
       headBone.rotation.y = THREE.MathUtils.lerp(
         headBone.rotation.y,
         THREE.MathUtils.clamp(
-          targetRotationY + idleHeadMovement.y,
-          -0.35,
-          0.35,
+          targetRotationY + idleHeadMovement.y + extraHeadRotY,
+          -0.6,
+          0.6,
         ),
-        cappedDelta * 5,
+        cappedDelta * 6,
       );
       headBone.rotation.x = THREE.MathUtils.lerp(
         headBone.rotation.x,
         THREE.MathUtils.clamp(
-          targetRotationX + idleHeadMovement.x,
-          -0.22,
-          0.22,
+          targetRotationX + idleHeadMovement.x + extraHeadRotX,
+          -0.35,
+          0.35,
         ),
-        cappedDelta * 5,
+        cappedDelta * 6,
+      );
+      headBone.rotation.z = THREE.MathUtils.lerp(
+        headBone.rotation.z,
+        extraHeadRotZ,
+        cappedDelta * 6,
       );
     }
 
@@ -348,12 +451,20 @@ export function AvatarModel() {
     if (neckBone) {
       neckBone.rotation.y = THREE.MathUtils.lerp(
         neckBone.rotation.y,
-        THREE.MathUtils.clamp(targetRotationY * 0.18, -0.1, 0.1),
+        THREE.MathUtils.clamp(
+          (targetRotationY + extraHeadRotY) * 0.22,
+          -0.16,
+          0.16,
+        ),
         cappedDelta * 4,
       );
       neckBone.rotation.x = THREE.MathUtils.lerp(
         neckBone.rotation.x,
-        THREE.MathUtils.clamp(targetRotationX * 0.15, -0.08, 0.08),
+        THREE.MathUtils.clamp(
+          (targetRotationX + extraHeadRotX) * 0.18,
+          -0.1,
+          0.1,
+        ),
         cappedDelta * 4,
       );
     }
@@ -425,22 +536,58 @@ export function AvatarModel() {
       );
     }
 
-    // === SUBTLE ARM MOVEMENT ===
+    // === ARM MOVEMENTS (NATURAL IDLE) ===
     const armSwaySpeed = 0.6;
-    const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.03;
+    const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.025;
 
     const rightArm = bonesMapRef.current.get("RightArm");
+    const rightForeArm = bonesMapRef.current.get("RightForeArm");
+    const rightHand = bonesMapRef.current.get("RightHand");
     const leftArm = bonesMapRef.current.get("LeftArm");
+    const leftForeArm = bonesMapRef.current.get("LeftForeArm");
+    const leftHand = bonesMapRef.current.get("LeftHand");
+
+    if (leftArm) {
+      leftArm.rotation.x = 1.2;
+      leftArm.rotation.y = 0;
+      leftArm.rotation.z = -armSway;
+    }
+    if (leftForeArm) {
+      leftForeArm.rotation.x = 0;
+      leftForeArm.rotation.y = 0.2;
+      leftForeArm.rotation.z = 0.3;
+    }
+    if (leftHand) {
+      leftHand.rotation.set(0, 0, 0);
+    }
 
     if (rightArm) {
+      rightArm.rotation.x = 1.2;
+      rightArm.rotation.y = 0;
       rightArm.rotation.z = armSway;
     }
-    if (leftArm) {
-      leftArm.rotation.z = -armSway;
+    if (rightForeArm) {
+      rightForeArm.rotation.x = 0;
+      rightForeArm.rotation.y = -0.2;
+      rightForeArm.rotation.z = -0.3;
+    }
+    if (rightHand) {
+      rightHand.rotation.set(0, 0, 0);
     }
   });
 
-  return <group ref={groupRef} />;
+  return (
+    <group
+      ref={groupRef}
+      onPointerDown={handleAvatarClick}
+      onPointerOver={() => {
+        gl.domElement.style.cursor = "pointer";
+      }}
+      onPointerOut={() => {
+        gl.domElement.style.cursor = "auto";
+      }}
+    />
+  );
 }
 
 useGLTF.preload("/TuananhDo_Portfolio/avatar.glb");
