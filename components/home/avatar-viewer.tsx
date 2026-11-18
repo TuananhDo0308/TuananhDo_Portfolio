@@ -265,18 +265,12 @@ export function AvatarModel() {
       );
     }
 
-    // === BREATHING & HUFF ANIMATION ===
-    let breathScale = 1 + Math.sin(timeRef.current * 0.8) * 0.015;
+    // === BREATHING ANIMATION ===
+    const breathScale = 1 + Math.sin(timeRef.current * 0.8) * 0.015;
 
     if (isGrumpyRef.current) {
       grumpyTimerRef.current += cappedDelta;
-      const t = grumpyTimerRef.current;
-      if (t < 2.4) {
-        // Annoyed chest puff in the first 0.5s
-        if (t < 0.5) {
-          breathScale += Math.sin((t * Math.PI) / 0.5) * 0.035;
-        }
-      } else {
+      if (grumpyTimerRef.current >= 2.4) {
         isGrumpyRef.current = false;
       }
     }
@@ -542,7 +536,7 @@ export function AvatarModel() {
       );
     }
 
-    // === ARM MOVEMENTS (NATURAL IDLE & REACTIONS) ===
+    // === ARM MOVEMENTS (NATURAL IDLE) ===
     const armSwaySpeed = 0.6;
     const armSway = Math.sin(timeRef.current * armSwaySpeed) * 0.025;
 
@@ -553,16 +547,10 @@ export function AvatarModel() {
     const leftForeArm = bonesMapRef.current.get("LeftForeArm");
     const leftHand = bonesMapRef.current.get("LeftHand");
 
-    let armReactZ = 0;
-    if (isGrumpyRef.current) {
-      // Tense arms slightly closer to sides when grumpy
-      armReactZ = -0.04;
-    }
-
     if (leftArm) {
       leftArm.rotation.x = 1.2;
       leftArm.rotation.y = 0;
-      leftArm.rotation.z = -armSway - armReactZ;
+      leftArm.rotation.z = -armSway;
     }
     if (leftForeArm) {
       leftForeArm.rotation.x = 0;
@@ -576,7 +564,7 @@ export function AvatarModel() {
     if (rightArm) {
       rightArm.rotation.x = 1.2;
       rightArm.rotation.y = 0;
-      rightArm.rotation.z = armSway + armReactZ;
+      rightArm.rotation.z = armSway;
     }
     if (rightForeArm) {
       rightForeArm.rotation.x = 0;
