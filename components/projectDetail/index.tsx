@@ -2,9 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { ProjectDetail as ProjectDetailType, projects } from "@/lib/project";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ProjectDetail as ProjectDetailType } from "@/lib/project";
+import { ArrowUpRight } from "lucide-react";
 
 interface ProjectDetailProps {
   project: ProjectDetailType;
@@ -53,25 +52,61 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
           <h1 className="text-4xl sm:text-5xl  md:text-7xl font-bold mb-4">{project.title}</h1>
           <p className="text-xl text-neutral-400 max-w-3xl">{project.description}</p>
 
-          {project.link && (
-            <motion.div
-              className="mt-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <a
-                href={project.link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-3 bg-neutral-900 text-neutral-300 rounded-full text-sm"
+          <div className="flex flex-wrap gap-4 mt-6">
+            {project.liveUrl && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
               >
-                {project.link.type === "Product"
-                  ? "Visit Product"
-                  : "View on GitHub"}
-              </a>
-            </motion.div>
-          )}
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-medium hover:bg-neutral-200 transition-colors rounded-full text-sm"
+                >
+                  Visit Live Site
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </motion.div>
+            )}
+            {project.githubUrl && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-neutral-300 hover:text-white hover:bg-neutral-800 transition-colors rounded-full text-sm border border-neutral-800"
+                >
+                  View on GitHub
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </motion.div>
+            )}
+            {!project.liveUrl && !project.githubUrl && project.link && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <a
+                  href={project.link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-neutral-300 hover:text-white transition-colors rounded-full text-sm"
+                >
+                  {project.link.type === "Product"
+                    ? "Visit Product"
+                    : "View on GitHub"}
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+              </motion.div>
+            )}
+          </div>
         </motion.div>
 
         {/* Project Meta Grid */}
