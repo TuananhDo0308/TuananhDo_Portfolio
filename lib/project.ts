@@ -37,7 +37,7 @@ export const projects: ProjectDetail[] = [
     },
     image: "/TuananhDo_Portfolio/images/Scylla.png",
     category: "Full-Stack Development & AI",
-    year: "2025",
+    year: "Oct 2026 – Present",
     client: "Open Source Project",
     role: "Full-Stack Developer",
     challenge:
@@ -45,7 +45,7 @@ export const projects: ProjectDetail[] = [
     solution:
       "Engineered Scylla, a unified team calendar, meeting room scheduling, and Kanban task tracking platform with built-in Model Context Protocol (MCP) server support. Built with Next.js 16 (App Router, React 19) and Bun, styled using Tailwind CSS v4, and backed by PostgreSQL 16 with Drizzle ORM. Implemented Google Calendar two-way synchronization, Google Workspace room directory integration, Better Auth authentication, and custom MCP tools enabling AI agents to schedule meetings and manage tasks directly from developer editors.",
     result:
-      "Successfully launched the platform at scylla-nu.vercel.app with open-source codebase on GitHub. Provided seamless multi-person timeline scheduling, intelligent room reservation with equipment filters, and native AI agent interoperability through MCP, allowing developers to manage meetings and deliverables entirely from their coding workflows.",
+      "Successfully launched the platform at scylla-nu.vercel.app with open-source codebase on GitHub. Currently actively maintained and running in production. Provided seamless multi-person timeline scheduling, intelligent room reservation with equipment filters, and native AI agent interoperability through MCP, allowing developers to manage meetings and deliverables entirely from their coding workflows.",
     images: [
       "/TuananhDo_Portfolio/images/Scylla.png",
       "/TuananhDo_Portfolio/images/scylla-calendar.png",
