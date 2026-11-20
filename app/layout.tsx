@@ -5,14 +5,14 @@ import './globals.css'
 import Layout from '@/components/layout/layout'
 
 export const metadata: Metadata = {
-  title: "Tuan Anh Do - Frontend Developer",
+  title: "Tuan Anh Do - Fullstack Developer",
   description:
-    "Creative frontend developer crafting beautiful, interactive digital experiences with modern web technologies.",
+    "Creative fullstack developer crafting beautiful, interactive digital experiences with modern web technologies.",
 
   openGraph: {
-    title: "Tuan Anh Do - Frontend Developer",
+    title: "Tuan Anh Do - Fullstack Developer",
     description:
-      "Creative frontend developer crafting beautiful, interactive digital experiences with modern web technologies.",
+      "Creative fullstack developer crafting beautiful, interactive digital experiences with modern web technologies.",
     siteName: "Tuan Anh Do Portfolio",
     url: "https://tuananhdo0308.github.io/TuananhDo_Portfolio",
     images: [
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   
   twitter: {
     card: "summary_large_image",
-    title: "Tuan Anh Do - Frontend Developer",
+    title: "Tuan Anh Do - Fullstack Developer",
     description:
-      "Creative frontend developer crafting beautiful, interactive digital experiences with modern web technologies.",
+      "Creative fullstack developer crafting beautiful, interactive digital experiences with modern web technologies.",
     images: ["https://tuananhdo0308.github.io/TuananhDo_Portfolio/metaimage.png"],
   },
 };
